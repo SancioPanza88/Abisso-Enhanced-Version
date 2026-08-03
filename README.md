@@ -36,3 +36,20 @@ Roguelike multiplayer in tempo reale, senza server, in un unico file.
 | `F` | Abilità di classe |
 | `Invio` | Chat |
 | `M` | Minimappa |
+
+## Idee scartate / in sospeso
+
+- **Animazioni multi-frame** per zombie e topo: i disegni (frame PNG) sono
+  pronti in `assets/anim/`, ma non sono ancora usate nel gioco (il progetto è
+  tornato agli sprite singoli). Non tutte le texture presenti nella cartella
+  `assets` sono quindi implementate.
+- Durante lo sviluppo alcune idee sono state provate e abbandonate (ad esempio
+  l'animazione a più fotogrammi dello zombie), per evitare complicazioni.
+
+## Bug
+
+Progetto in evoluzione: il gioco presenterà sicuramente dei bug. Il
+multiplayer dipende dalla rete (VPN, relay, firewall) e in condizioni
+particolari i giocatori possono non vedersi subito; il gioco cerca comunque di
+ricongiungere i mondi da solo. Se trovi un problema, segnalalo aprendo una
+issue sul repository.
