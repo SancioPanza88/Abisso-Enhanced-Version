@@ -7,7 +7,7 @@ Roguelike multiplayer in tempo reale, senza server, in un unico file.
 - 🚀 Questa versione: (https://sanciopanza88.github.io/Abisso-Enhanced-Version/)
 ## Come si gioca
 
-1. Apri `abisso.html` in un browser moderno.
+1. Apri `https://sanciopanza88.github.io/Abisso-Enhanced-Version/` in un browser moderno.
 2. Scegli nome, classe e stanza, poi scendi nell'abisso.
 3. Per giocare con altri condividi l'indirizzo (stessa stanza = stesso mondo).
 
