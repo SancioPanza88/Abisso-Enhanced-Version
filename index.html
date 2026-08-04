@@ -142,21 +142,57 @@ html,body{
 #login-screen{
   position:absolute; inset:0; z-index:55; overflow-y:auto;
   display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px;
-  background:radial-gradient(ellipse at 50% 40%, #1b140c 0%, #070502 75%);
+  background:
+    radial-gradient(ellipse at 50% 42%, #221910 0%, #070502 78%),
+    var(--void);
   padding:30px 16px; transition:opacity .4s ease;
 }
+#login-screen::before{
+  content:''; position:fixed; inset:0; pointer-events:none;
+  background:
+    radial-gradient(120% 90% at 50% 112%, rgba(232,161,61,.10), transparent 55%),
+    radial-gradient(80% 60% at 12% -5%, rgba(232,161,61,.06), transparent 60%),
+    radial-gradient(80% 60% at 88% -5%, rgba(232,161,61,.06), transparent 60%);
+  animation:bgRespire 7s ease-in-out infinite;
+}
+@keyframes bgRespire{ 0%,100%{ opacity:.85; } 50%{ opacity:1; } }
 #login-screen.hidden{ opacity:0; pointer-events:none; display:none; }
 #login-screen h1{
-  font-family:var(--font-display); font-size:clamp(2rem,7vw,3.2rem); letter-spacing:.14em;
-  color:var(--amber); margin:0; text-shadow:0 0 22px rgba(232,161,61,.55), 0 0 3px rgba(0,0,0,.9);
-  animation:titleGlow 3.2s ease-in-out infinite;
+  font-family:var(--font-display); font-size:clamp(2.2rem,8vw,3.6rem); letter-spacing:.18em;
+  margin:0; font-weight:700; line-height:1; color:transparent;
+  background:linear-gradient(180deg,#ffe9b0 0%,#e8a13d 45%,#a76b1c 80%,#5c3a10 100%);
+  -webkit-background-clip:text; background-clip:text;
+  animation:titlePulse 3.2s ease-in-out infinite;
 }
-#login-screen .login-sub{ color:var(--ink); font-size:.8rem; margin-bottom:6px; text-align:center; }
-#login-box{ width:min(360px,92vw); display:flex; flex-direction:column; gap:12px; }
-.login-field label{ display:block; font-size:11px; color:var(--ink); text-transform:uppercase; letter-spacing:.06em; margin-bottom:4px; }
+#login-screen h1::after{
+  content:''; display:block; height:2px; margin:8px auto 0; width:min(240px,72%);
+  background:linear-gradient(90deg,transparent,#e8a13d,transparent);
+  border-radius:2px;
+}
+@keyframes titlePulse{
+  0%,100%{ filter:drop-shadow(0 0 14px rgba(232,161,61,.42)) drop-shadow(0 2px 3px rgba(0,0,0,.9)); }
+  50%{ filter:drop-shadow(0 0 26px rgba(232,161,61,.72)) drop-shadow(0 2px 3px rgba(0,0,0,.9)); }
+}
+#login-screen .login-sub{ color:var(--ink); font-size:.8rem; margin-bottom:8px; text-align:center; letter-spacing:.02em; }
+#login-box{
+  width:min(360px,92vw); display:flex; flex-direction:column; gap:12px;
+  padding:18px 16px 16px; border-radius:12px;
+  background:linear-gradient(180deg,rgba(28,20,12,.72),rgba(12,9,5,.84));
+  border:1px solid rgba(232,161,61,.28);
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.45), 0 18px 50px rgba(0,0,0,.6), 0 0 42px rgba(232,161,61,.06);
+  backdrop-filter:blur(3px);
+  animation:menuRise .5s cubic-bezier(.2,.8,.3,1.1);
+}
+@keyframes menuRise{ 0%{ opacity:0; transform:translateY(14px) scale(.985); } 100%{ opacity:1; transform:translateY(0) scale(1); } }
+.login-field label{ display:block; font-size:11px; color:var(--ink); text-transform:uppercase; letter-spacing:.07em; margin-bottom:4px; }
 .login-field input[type="text"], .login-field input:not([type]), #login-name, #login-room, #login-maxplayers{
-  width:100%; background:rgba(10,8,5,.7); border:1px solid rgba(232,161,61,.3); border-radius:5px;
-  color:var(--parchment); font-family:var(--font-ui); font-size:14px; padding:8px 10px; box-sizing:border-box;
+  width:100%; background:rgba(10,8,5,.7); border:1px solid rgba(232,161,61,.3); border-radius:6px;
+  color:var(--parchment); font-family:var(--font-ui); font-size:14px; padding:9px 11px; box-sizing:border-box;
+  transition:border-color .18s ease, box-shadow .18s ease, background .18s ease;
+}
+.login-field input:focus{
+  outline:none; border-color:var(--amber); background:rgba(14,11,7,.92);
+  box-shadow:0 0 0 1px var(--amber), 0 0 14px rgba(232,161,61,.22);
 }
 .login-room-row{ display:flex; gap:6px; }
 .login-room-row input{ flex:1; }
@@ -211,13 +247,21 @@ html,body{
 #login-maxplayers{ width:70px; flex:none; }
 .login-hint{ font-size:10px; color:var(--ink); line-height:1.4; }
 #login-submit{
-  background:linear-gradient(180deg,#4a3520,#241407); border:1px solid var(--amber); color:var(--amber);
-  border-radius:6px; padding:11px; font-family:var(--font-display); font-size:16px; letter-spacing:.04em;
-  cursor:pointer; margin-top:4px;
-  transition:background .2s ease, box-shadow .2s ease, transform .12s ease;
+  position:relative; overflow:hidden;
+  background:linear-gradient(180deg,#5a4228 0%,#36210f 55%,#241407 100%);
+  border:1px solid var(--amber); color:#ffd98a; text-shadow:0 1px 2px rgba(0,0,0,.85);
+  border-radius:8px; padding:12px; font-family:var(--font-display); font-size:17px; letter-spacing:.06em;
+  cursor:pointer; margin-top:6px;
+  transition:box-shadow .2s ease, transform .12s ease, border-color .2s ease;
 }
-#login-submit:hover{ background:linear-gradient(180deg,#5a4228,#2c1808); box-shadow:0 0 16px rgba(232,161,61,.3); }
-#login-submit:active{ transform:scale(.98); }
+#login-submit::after{
+  content:''; position:absolute; top:0; left:-120%; width:60%; height:100%;
+  background:linear-gradient(100deg,transparent,rgba(255,240,200,.28),transparent);
+  animation:shimmer 3s ease-in-out infinite;
+}
+@keyframes shimmer{ 0%{ left:-120%; } 60%,100%{ left:150%; } }
+#login-submit:hover{ transform:translateY(-1px); border-color:#ffd98a; box-shadow:0 0 22px rgba(232,161,61,.45); }
+#login-submit:active{ transform:translateY(0) scale(.97); }
 .login-note{ font-size:10.5px; color:var(--ink); text-align:center; line-height:1.5; }
 
 #interact-floating-btn{
@@ -4111,7 +4155,8 @@ window.addEventListener('keydown', (e)=>{
     return;
   }
   if (document.getElementById('merchant-panel').classList.contains('show')){
-    if (e.code==='Escape') closeMerchantPanel();
+    // con E o Esc si esce dal mercante (E rispetta la stessa logica dell'interazione)
+    if (e.code==='Escape' || e.code==='KeyE'){ closeMerchantPanel(); e.preventDefault(); }
     return;
   }
   if (document.getElementById('hero-name') === document.activeElement) return;
