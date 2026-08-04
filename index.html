@@ -164,20 +164,48 @@ html,body{
   background:var(--stone); border:1px solid var(--amber-deep); color:var(--amber); border-radius:5px;
   width:38px; cursor:pointer; font-size:15px;
 }
-#login-classes{ display:grid; grid-template-columns:1fr 1fr; gap:7px; }
+#login-classes{ display:grid; grid-template-columns:1fr 1fr; gap:9px; }
 .login-class-card{
-  border:1.5px solid rgba(232,161,61,.25); border-radius:6px; padding:8px; cursor:pointer;
-  display:flex; flex-direction:column; align-items:center; text-align:center; gap:2px;
-  background:rgba(10,8,5,.4);
+  border:1.5px solid color-mix(in srgb, var(--acc) 40%, rgba(232,161,61,.25));
+  border-radius:10px; padding:12px 8px 9px; cursor:pointer;
+  display:flex; flex-direction:column; align-items:center; text-align:center; gap:3px;
+  background:
+    radial-gradient(150px 90px at 50% -10%, color-mix(in srgb, var(--acc) 26%, transparent), transparent 70%),
+    rgba(10,8,5,.5);
   transition:border-color .2s ease, background .2s ease, box-shadow .2s ease, transform .15s ease;
 }
-.login-class-card:hover{ border-color:rgba(232,161,61,.55); transform:translateY(-1px); }
+.login-class-card:hover{ border-color:var(--acc); transform:translateY(-2px); }
 .login-class-card:active{ transform:translateY(0) scale(.98); }
-.login-class-card .lc-icon{ font-size:22px; transition:transform .2s ease; }
-.login-class-card:hover .lc-icon{ transform:scale(1.12); }
-.login-class-card b{ font-size:11.5px; color:var(--parchment); }
-.login-class-card span{ font-size:9.5px; color:var(--ink); line-height:1.3; }
-.login-class-card.selected{ border-color:var(--amber); background:rgba(232,161,61,.13); box-shadow:0 0 12px rgba(232,161,61,.3); animation:cardPulse .5s ease; }
+.login-class-card .lc-hero{
+  width:60px; height:60px; display:flex; align-items:center; justify-content:center;
+  border-radius:50%; margin-bottom:3px;
+  background:radial-gradient(circle at 50% 34%, color-mix(in srgb, var(--acc) 42%, transparent), rgba(0,0,0,.55));
+  border:1px solid color-mix(in srgb, var(--acc) 70%, transparent);
+  box-shadow:0 0 12px color-mix(in srgb, var(--acc) 28%, transparent);
+}
+.login-class-card .lc-img{ width:56px; height:56px; object-fit:contain; transition:transform .2s ease; }
+.login-class-card:hover .lc-img{ transform:scale(1.1); }
+.login-class-card .lc-fb{ font-size:24px; }
+.login-class-card b{
+  font-size:12.5px; color:var(--parchment); font-family:var(--font-display); letter-spacing:.05em; margin-top:1px;
+}
+.login-class-card > span{ font-size:9.5px; color:var(--ink); line-height:1.35; }
+.login-class-card .lc-ability{
+  display:flex; align-items:center; justify-content:center; gap:4px; margin-top:4px; padding:2px 7px;
+  border-radius:8px; background:rgba(0,0,0,.25); border:1px solid color-mix(in srgb, var(--acc) 30%, transparent);
+  color:var(--ink); font-size:9.5px;
+}
+.login-class-card .lc-ability .ab-ic{ display:flex; align-items:center; }
+.login-class-card .lc-ability .ab-em{ display:inline; font-size:11px; }
+.login-class-card.selected{
+  border-color:var(--acc);
+  background:
+    radial-gradient(150px 90px at 50% -10%, color-mix(in srgb, var(--acc) 40%, transparent), transparent 70%),
+    rgba(10,8,5,.65);
+  box-shadow:0 0 16px color-mix(in srgb, var(--acc) 48%, transparent);
+  animation:cardPulse .5s ease;
+}
+.login-class-card.selected .lc-ability{ border-color:var(--acc); color:var(--amber); }
 @keyframes cardPulse{ 0%{ transform:scale(1); } 40%{ transform:scale(1.035); } 100%{ transform:scale(1); } }
 #login-maxplayers-row{ display:flex; align-items:center; gap:8px; }
 #login-maxplayers{ width:70px; flex:none; }
@@ -269,8 +297,11 @@ html,body{
 .eq-slot{
   width:20px; height:20px; border-radius:50%; background:rgba(8,6,4,.92); border:1.5px solid rgba(232,161,61,.3);
   display:flex; align-items:center; justify-content:center; font-size:11px; opacity:.38; filter:grayscale(1);
+  transition:opacity .2s ease, filter .2s ease, box-shadow .2s ease;
 }
 .eq-slot.filled{ opacity:1; filter:none; border-color:var(--gold); box-shadow:0 0 6px rgba(212,175,55,.65); }
+.eq-slot img{ width:78%; height:78%; object-fit:contain; image-rendering:pixelated; }
+.eq-slot .eq-fallback{ display:none; }
 .orb{
   width:70px; height:70px; border-radius:50%; position:relative; overflow:hidden; margin-left:-10px; z-index:1;
   border:3px solid #2a2115; box-shadow:0 0 14px rgba(0,0,0,.65), inset 0 3px 8px rgba(0,0,0,.7);
@@ -288,6 +319,8 @@ html,body{
 #hero-meta b{ color:var(--gold); }
 #potion-hint{ color:var(--ink); }
 #potion-hint b{ color:var(--blood); }
+.hud-icon{ width:13px; height:13px; object-fit:contain; image-rendering:pixelated; vertical-align:-2px; }
+.hud-icon-fallback{ display:none; }
 #buffs-row{ display:flex; gap:6px; margin-top:5px; min-height:18px; }
 .buff-chip{ display:flex; align-items:center; gap:3px; font-size:11px; background:rgba(232,161,61,.12); border:1px solid rgba(232,161,61,.3); border-radius:10px; padding:1px 7px 1px 5px; color:var(--parchment); }
 
@@ -360,26 +393,37 @@ html,body{
   display:flex; align-items:center; gap:8px; padding:6px 7px; border-radius:5px; cursor:pointer; margin-bottom:3px;
 }
 .class-opt:hover{ background:rgba(232,161,61,.12); }
-.class-opt .ic{ font-size:18px; width:22px; text-align:center; }
+.class-opt .ic{ width:30px; height:30px; flex:none; display:flex; align-items:center; justify-content:center;
+    border-radius:50%; background:rgba(0,0,0,.3); border:1px solid rgba(232,161,61,.2); }
+.class-opt .ic img{ width:28px; height:28px; object-fit:contain; }
 .class-opt .txt b{ display:block; font-size:12px; color:var(--parchment); }
 .class-opt .txt span{ font-size:10px; color:var(--ink); }
 
 #merchant-panel{
-  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%) scale(.9);
   padding:16px 18px; width:min(300px,86vw); display:none; z-index:40; pointer-events:auto;
+  opacity:0;
 }
-#merchant-panel.show{ display:block; }
+#merchant-panel.show{ display:block; animation:panelPopIn .32s cubic-bezier(.2,.85,.3,1.2) forwards; }
+@keyframes panelPopIn{
+  0%{ opacity:0; transform:translate(-50%,-50%) scale(.88) translateY(8px); }
+  100%{ opacity:1; transform:translate(-50%,-50%) scale(1) translateY(0); }
+}
 #merchant-panel h3{ margin:0 0 8px; color:var(--amber); font-family:var(--font-display); font-size:17px; letter-spacing:.03em; text-align:center; }
 .merchant-gold{ text-align:center; font-size:12px; color:var(--ink); margin-bottom:10px; }
 .merchant-gold b{ color:var(--gold); }
-.merchant-row{ display:flex; align-items:center; gap:8px; padding:6px 4px; border-bottom:1px solid rgba(232,161,61,.12); }
+.merchant-row{ display:flex; align-items:center; gap:8px; padding:6px 4px; border-bottom:1px solid rgba(232,161,61,.12); transition:background .15s ease; }
+.merchant-row:hover{ background:rgba(232,161,61,.06); }
 .merchant-row:last-of-type{ border-bottom:none; }
 .mr-icon{ font-size:18px; width:24px; text-align:center; }
 .mr-name{ flex:1; font-size:12.5px; color:var(--parchment); }
 .mr-buy{
   background:var(--stone); border:1px solid var(--amber-deep); color:var(--amber); border-radius:5px;
   padding:5px 9px; font-family:var(--font-ui); font-size:11.5px; cursor:pointer; white-space:nowrap;
+  transition:background .15s ease, transform .1s ease, box-shadow .15s ease;
 }
+.mr-buy:hover:not(:disabled){ background:#5a4228; box-shadow:0 0 10px rgba(232,161,61,.3); }
+.mr-buy:active:not(:disabled){ transform:scale(.94); }
 .mr-buy:disabled{ opacity:.35; cursor:not-allowed; border-color:rgba(232,161,61,.2); color:var(--ink); }
 .merchant-note{ margin-top:10px; font-size:10.5px; color:var(--ink); text-align:center; line-height:1.5; }
 
@@ -391,14 +435,42 @@ html,body{
 }
 #toast.show{ opacity:1; transform:translate(-50%,-50%) scale(1); }
 
+#loot-banner{
+  position:absolute; top:22%; left:50%; transform:translate(-50%,-60%) scale(.7); z-index:26;
+  display:flex; align-items:center; gap:10px;
+  padding:10px 22px; border-radius:10px; pointer-events:none;
+  font-family:var(--font-display); font-size:clamp(1.1rem,3.2vw,1.6rem); letter-spacing:.08em;
+  background:rgba(10,8,5,.55); border:1px solid rgba(255,255,255,.25);
+  opacity:0; white-space:nowrap;
+}
+#loot-banner-icon{ font-size:1.5em; }
+#loot-banner.show{
+  animation:lootBannerIn 2.6s cubic-bezier(.2,.9,.25,1) forwards;
+}
+@keyframes lootBannerIn{
+  0%{ opacity:0; transform:translate(-50%,-60%) scale(.6); filter:brightness(2); }
+  10%{ opacity:1; transform:translate(-50%,-50%) scale(1.08); filter:brightness(1.3); }
+  18%{ transform:translate(-50%,-50%) scale(1); filter:brightness(1); }
+  82%{ opacity:1; transform:translate(-50%,-50%) scale(1); }
+  100%{ opacity:0; transform:translate(-50%,-46%) scale(.96); }
+}
+
 #deathscreen{
   position:absolute; inset:0; z-index:40; display:none; align-items:center; justify-content:center; flex-direction:column; gap:10px;
   background:radial-gradient(ellipse at center, rgba(60,10,10,.35), rgba(3,1,1,.92));
+  opacity:0;
 }
-#deathscreen.show{ display:flex; }
+#deathscreen.show{ display:flex; animation:deathFadeIn .6s ease forwards; }
+@keyframes deathFadeIn{ from{ opacity:0; } to{ opacity:1; } }
 #deathscreen h2{ font-family:var(--font-display); color:var(--blood); font-size:2.4rem; letter-spacing:.1em; margin:0;
-  text-shadow:0 0 26px rgba(193,68,58,.7);}
-#deathscreen p{ color:var(--ink); font-size:.85rem; }
+  text-shadow:0 0 26px rgba(193,68,58,.7);
+  animation:deathTitleIn .7s cubic-bezier(.2,.8,.25,1) .15s backwards;
+}
+@keyframes deathTitleIn{
+  0%{ opacity:0; transform:scale(1.4) translateY(-10px); letter-spacing:.3em; }
+  100%{ opacity:1; transform:scale(1) translateY(0); letter-spacing:.1em; }
+}
+#deathscreen p{ color:var(--ink); font-size:.85rem; animation:deathFadeIn .6s ease .4s backwards; }
 #death-record{ color:var(--amber) !important; font-size:.8rem; margin-top:-4px; }
 
 #downed-overlay{
@@ -464,14 +536,14 @@ html,body{
     <div id="hero-panel" class="panel">
       <div id="hero-row1">
         <button id="hero-class-btn" title="Cambia classe">⚔️</button>
-        <button id="ability-btn" title="Abilità speciale (F)">⚡<span id="ability-cd"></span></button>
+        <button id="ability-btn" title="Abilità speciale (F)"><img id="ability-icon-img" src="assets/sprites/icon_lightning.png" alt="" onerror="this.dataset.failed='1'; this.style.display='none'; this.nextElementSibling.style.display='inline';" style="width:18px;height:18px;object-fit:contain;image-rendering:pixelated;"><span id="ability-icon-fallback" class="hud-icon-fallback">⚡</span><span id="ability-cd"></span></button>
         <div id="hero-name" contenteditable="false" spellcheck="false" title="Clicca per rinominarti">Viandante</div>
         <div id="hero-depth" title="Profondità attuale dell'abisso: mostri più forti e bottino migliore man mano che si scende">Piano 1</div>
       </div>
       <div id="hero-meta">
-        <span id="gold-span" title="Oro raccolto">🪙 <b id="gold-text">0</b></span>
-        <span id="potion-hint" title="Pozioni di salute — tasto Q per berne una">🧪 <b id="potion-text">0</b></span>
-        <span id="manapotion-hint" style="display:none" title="Pozioni di mana — tasto R per berne una">🔮 <b id="manapotion-text">0</b></span>
+        <span id="gold-span" title="Oro raccolto"><img class="hud-icon" src="assets/sprites/icon_gold.png" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';"><span class="hud-icon-fallback">🪙</span> <b id="gold-text">0</b></span>
+        <span id="potion-hint" title="Pozioni di salute — tasto Q per berne una"><img class="hud-icon" src="assets/sprites/icon_potion_hp.png" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';"><span class="hud-icon-fallback">🧪</span> <b id="potion-text">0</b></span>
+        <span id="manapotion-hint" style="display:none" title="Pozioni di mana — tasto R per berne una"><img class="hud-icon" src="assets/sprites/icon_potion_mana.png" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';"><span class="hud-icon-fallback">🔮</span> <b id="manapotion-text">0</b></span>
       </div>
       <div id="buffs-row"></div>
     </div>
@@ -495,11 +567,11 @@ html,body{
 
     <div id="diablo-hud-left">
       <div id="equip-slots">
-        <div class="eq-slot" data-slot="helm">🪖</div>
-        <div class="eq-slot" data-slot="necklace">📿</div>
-        <div class="eq-slot" data-slot="armor">🛡️</div>
-        <div class="eq-slot" data-slot="ring">💍</div>
-        <div class="eq-slot" data-slot="greaves">👢</div>
+        <div class="eq-slot" data-slot="helm"><img src="assets/sprites/equip_helm.png" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><span class="eq-fallback">🪖</span></div>
+        <div class="eq-slot" data-slot="necklace"><img src="assets/sprites/equip_necklace.png" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><span class="eq-fallback">📿</span></div>
+        <div class="eq-slot" data-slot="armor"><img src="assets/sprites/equip_armor.png" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><span class="eq-fallback">🛡️</span></div>
+        <div class="eq-slot" data-slot="ring"><img src="assets/sprites/equip_ring.png" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><span class="eq-fallback">💍</span></div>
+        <div class="eq-slot" data-slot="greaves"><img src="assets/sprites/equip_greaves.png" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><span class="eq-fallback">👢</span></div>
       </div>
       <div id="char-portrait" title="Il tuo personaggio — clicca l'icona classe qui sopra per cambiarlo"><span id="portrait-icon">⚔️</span></div>
       <div class="orb hp-orb" id="hp-orb">
@@ -548,6 +620,7 @@ html,body{
     </div>
 
     <div id="toast"></div>
+    <div id="loot-banner"><span id="loot-banner-icon"></span><span id="loot-banner-text"></span></div>
     <div id="hover-tooltip" class="panel"></div>
   </div>
 
@@ -560,7 +633,7 @@ html,body{
     </div>
     <div id="potion-btn">🧪</div>
     <div id="mana-potion-btn">🔮</div>
-    <div id="ability-touch-btn">⚡</div>
+    <div id="ability-touch-btn"><img id="ability-touch-img" src="assets/sprites/icon_lightning.png" alt="" onerror="this.dataset.failed='1'; this.style.display='none'; this.nextElementSibling.style.display='inline';" style="width:24px;height:24px;object-fit:contain;image-rendering:pixelated;"><span id="ability-touch-fallback" class="hud-icon-fallback">⚡</span></div>
     <div id="atk-btn">⚔</div>
   </div>
 
@@ -612,7 +685,7 @@ html,body{
     <div id="room-full-box" class="panel">
       <h3>Stanza piena</h3>
       <p id="room-full-text">La stanza è al completo.</p>
-      <button id="spectate-btn">👁️ Entra come osservatore</button>
+      <button id="spectate-btn"><img class="hud-icon" src="assets/sprites/icon_eye.png" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';"><span class="hud-icon-fallback">👁️</span> Entra come osservatore</button>
       <button id="changeroom-btn">🚪 Cambia stanza</button>
     </div>
   </div>
@@ -626,7 +699,7 @@ html,body{
 
   <div id="sprite-loading" class="hidden">
     <div class="spin"></div>
-    <div class="sub" id="sprite-loading-status">Caricamento sprite… 0/17</div>
+    <div class="sub" id="sprite-loading-status">Caricamento sprite… 0/31</div>
   </div>
 </div>
 
@@ -699,6 +772,12 @@ function mulberry32(seed){
   };
 }
 function clamp(v,a,b){ return v<a?a:(v>b?b:v); }
+function hexToRgba(hex, a){
+  hex = hex.replace('#','');
+  if (hex.length===3) hex = hex.split('').map(c=>c+c).join('');
+  const r = parseInt(hex.substr(0,2),16)||0, g = parseInt(hex.substr(2,2),16)||0, b = parseInt(hex.substr(4,2),16)||0;
+  return 'rgba('+r+','+g+','+b+','+a+')';
+}
 function lerp(a,b,t){ return a+(b-a)*t; }
 function dist2(ax,ay,bx,by){ const dx=ax-bx, dy=ay-by; return dx*dx+dy*dy; }
 
@@ -729,7 +808,15 @@ function saveRecord(){
 function updateRecordIfBetter(){
   let changed = false;
   if (me.gold > record.gold){ record.gold = me.gold; changed = true; }
-  if (world.depth > record.depth){ record.depth = world.depth; changed = true; }
+  if (world.depth > record.depth){
+    const isNewBest = world.depth > record.depth && record.depth>1; // non al primissimo piano
+    record.depth = world.depth; changed = true;
+    if (isNewBest && !me._recordToastShown){
+      me._recordToastShown = true;
+      setTimeout(()=>{ me._recordToastShown = false; }, 3000);
+      showLootBanner('🏆', 'NUOVO RECORD — Piano '+world.depth, '#ffd35c');
+    }
+  }
   if (changed) saveRecord();
 }
 
@@ -774,7 +861,7 @@ const MONSTER_TYPES = {
    suo tipo base, senza dover inventare nuovi tipi. Probabilità e potenza
    crescono lentamente con la profondità. I boss non li usano (già speciali). */
 const MONSTER_AFFIXES = {
-  veloce:      { name:'Veloce',      icon:'⚡', color:'#ffe066', speedMult:1.6 },
+  veloce:      { name:'Veloce',      icon:'⚡', sprite:'icon_lightning', color:'#ffe066', speedMult:1.6 },
   esplosivo:   { name:'Esplosivo',   icon:'💥', color:'#ff6b4a', explodeRadius:1.8 },
   rigenerante: { name:'Rigenerante', icon:'❤️‍🩹', color:'#7fae63', regenPerSec:0.045 },
 };
@@ -797,10 +884,10 @@ function scaledStat(base, depth, factor){ return Math.round(base*(1+factor*(dept
 /* Potenziamenti temporanei: compaiono nel mondo come oggetti a terra, chiunque può
    raccoglierli (non sono legati a una classe specifica), e danno un effetto a tempo. */
 const POWERUP_TYPES = {
-  rage:  { glyph:'💪', color:'#e05b4f', name:'Furia',           desc:'+40% danno',      duration:12 },
-  shield:{ glyph:'🛡️', color:'#5fa0c9', name:'Scudo',           desc:'-50% danno subito', duration:10 },
-  haste: { glyph:'👟', color:'#d4af37', name:'Fretta',          desc:'+40% velocità',   duration:12 },
-  focus: { glyph:'🔷', color:'#8fd1ff', name:'Concentrazione',  desc:'-50% recupero attacco', duration:10 },
+  rage:  { glyph:'💪', sprite:'furia', color:'#e05b4f', name:'Furia',           desc:'+40% danno',      duration:12 },
+  shield:{ glyph:'🛡️', sprite:'icon_shield_buff', color:'#5fa0c9', name:'Scudo',           desc:'-50% danno subito', duration:10 },
+  haste: { glyph:'👟', sprite:'potenziamento_fretta', color:'#d4af37', name:'Fretta',          desc:'+40% velocità',   duration:12 },
+  focus: { glyph:'🔷', sprite:'powerupfocus', color:'#8fd1ff', name:'Concentrazione',  desc:'-50% recupero attacco', duration:10 },
 };
 const POWERUP_KEYS = Object.keys(POWERUP_TYPES);
 
@@ -1313,10 +1400,26 @@ function updateMonsterAI(m, dt, players){
       if (t.erratic && Math.random()<0.03){ vx += (Math.random()-0.5)*1.4; vy += (Math.random()-0.5)*1.4; }
       tryMoveEntity(world.layout, m, vx, vy, dt, 0.27, world.layout.safeZone);
     } else if (m.atkCd<=0){
-      m.atkCd = 1.05 + Math.random()*0.3;
-      m._atkT = 0.28; // solo rendering: durata dello squash&stretch dello swing
-      hostDealMonsterHit(target.peerId, m.dmg + Math.floor(Math.random()*2), !!t.poison);
-      if (t.lifesteal) m.hp = Math.min(m.maxHp, m.hp+2);
+      if (t.boss && !m._winding){
+        // telegraph: i boss annunciano il colpo con una breve carica visibile prima di colpire,
+        // dando ai giocatori una finestra reale per schivare — i mostri normali restano istantanei
+        m._winding = true;
+        m._windT = 0.5;
+        m.atkCd = 0.5 + 0.35 + Math.random()*0.2; // include il tempo di carica + recupero
+      } else if (t.boss && m._winding){
+        m._windT -= dt;
+        if (m._windT<=0){
+          m._winding = false;
+          m._atkT = 0.32;
+          hostDealMonsterHit(target.peerId, m.dmg + Math.floor(Math.random()*2), !!t.poison);
+          if (t.lifesteal) m.hp = Math.min(m.maxHp, m.hp+2);
+        }
+      } else {
+        m.atkCd = 1.05 + Math.random()*0.3;
+        m._atkT = 0.28; // solo rendering: durata dello squash&stretch dello swing
+        hostDealMonsterHit(target.peerId, m.dmg + Math.floor(Math.random()*2), !!t.poison);
+        if (t.lifesteal) m.hp = Math.min(m.maxHp, m.hp+2);
+      }
     }
   } else {
     m.state = 'wander';
@@ -1372,7 +1475,7 @@ function buildSyncPayload(){
     seed: world.seed,
     maxPlayers: world.maxPlayers,
     playerCount: computePlayerCount(),
-    monsters: world.monsters.map(m=>({id:m.id,type:m.type,x:round2(m.x),y:round2(m.y),hp:m.hp,maxHp:m.maxHp,dmg:m.dmg,facing:m.facing,splitLeft:m.splitLeft||0})),
+    monsters: world.monsters.map(m=>({id:m.id,type:m.type,x:round2(m.x),y:round2(m.y),hp:m.hp,maxHp:m.maxHp,dmg:m.dmg,facing:m.facing,splitLeft:m.splitLeft||0,winding:!!m._winding})),
     chestsOpened: world.chestsOpened,
     items: world.items,
   };
@@ -1428,8 +1531,8 @@ function mergeSnapshot(payload){
   const incoming = new Map(payload.monsters.map(m=>[m.id,m]));
   for (const im of payload.monsters){
     let ex = world.monsters.find(m=>m.id===im.id);
-    if (ex){ if (ex.hp > im.hp) ex.hitFlashAt = performance.now(); ex.x=im.x; ex.y=im.y; ex.hp=im.hp; ex.maxHp=im.maxHp; ex.facing=im.facing; }
-    else { world.monsters.push({...im, rx:im.x, ry:im.y, state:'idle', wanderT:0, wanderTarget:null, atkCd:0, speed:MONSTER_TYPES[im.type].speed, aggro:MONSTER_TYPES[im.type].aggro}); }
+    if (ex){ if (ex.hp > im.hp) ex.hitFlashAt = performance.now(); ex.x=im.x; ex.y=im.y; ex.hp=im.hp; ex.maxHp=im.maxHp; ex.facing=im.facing; ex._winding=!!im.winding; }
+    else { world.monsters.push({...im, rx:im.x, ry:im.y, state:'idle', wanderT:0, wanderTarget:null, atkCd:0, speed:MONSTER_TYPES[im.type].speed, aggro:MONSTER_TYPES[im.type].aggro, _winding:!!im.winding}); }
   }
   world.monsters = world.monsters.filter(m=>incoming.has(m.id));
   world.chestsOpened = {...payload.chestsOpened};
@@ -1597,19 +1700,23 @@ function renderMerchantPanel(){
   const prices = merchantPrices();
   const panel = document.getElementById('merchant-panel');
   const rows = [
-    {kind:'potion', icon:'🧪', name:'Pozione di salute', cost:prices.potion},
-    {kind:'manapotion', icon:'🔮', name:'Pozione di mana', cost:prices.manapotion},
+    {kind:'potion', icon:'🧪', src:'assets/sprites/icon_potion_hp.png', name:'Pozione di salute', cost:prices.potion},
+    {kind:'manapotion', icon:'🔮', src:'assets/sprites/icon_potion_mana.png', name:'Pozione di mana', cost:prices.manapotion},
     {kind:'power', icon:'🍀', name:'Potenziamento a sorte', cost:prices.power},
     {kind:'equip', icon:'🎲', name:'Equipaggiamento a sorte', cost:prices.equip},
   ];
-  panel.innerHTML = '<h3>🏪 Mercante</h3>'
-    + '<div class="merchant-gold">Il tuo oro: <b>'+me.gold+' 🪙</b></div>'
+  const goldIcon = '<img class="hud-icon" src="assets/sprites/icon_gold.png" alt=""'+IMG_FALLBACK_ATTR+'><span class="hud-icon-fallback">🪙</span>';
+  const pickupIcon = r => r.src
+    ? '<img class="hud-icon" src="'+r.src+'" alt=""'+IMG_FALLBACK_ATTR+'><span class="hud-icon-fallback">'+r.icon+'</span>'
+    : r.icon;
+  panel.innerHTML = '<h3><img class="hud-icon" src="assets/sprites/merchant.png" alt=""'+IMG_FALLBACK_ATTR+'><span class="hud-icon-fallback">🏪</span> Mercante</h3>'
+    + '<div class="merchant-gold">Il tuo oro: <b>'+goldIcon+' '+me.gold+'</b></div>'
     + rows.map(r=>{
         const afford = me.gold>=r.cost;
         return '<div class="merchant-row">'
-          +'<span class="mr-icon">'+r.icon+'</span>'
+          +'<span class="mr-icon">'+pickupIcon(r)+'</span>'
           +'<span class="mr-name">'+r.name+'</span>'
-          +'<button class="mr-buy" data-kind="'+r.kind+'" '+(afford?'':'disabled')+'>'+r.cost+' 🪙</button>'
+          +'<button class="mr-buy" data-kind="'+r.kind+'" '+(afford?'':'disabled')+'>'+goldIcon+' '+r.cost+'</button>'
           +'</div>';
       }).join('')
     + '<div class="merchant-note">Se scompare, tutto ciò che compri sparisce con te alla morte. Spendilo finché puoi.</div>';
@@ -1638,6 +1745,12 @@ function tryEquipOrSalvage(item){
     const statTxt = item.stats.map(s=>{ const d=STAT_POOL.find(x=>x.key===s.statKey); return d?d.fmt(s.value):''; }).join(', ');
     spawnFloatText(me.x, me.y-0.7, EQUIP_INFO[item.slot].icon+' '+rarityInfo.name+'!', rarityInfo.color);
     logLine('Hai equipaggiato: '+EQUIP_INFO[item.slot].name+' '+rarityInfo.name+' ('+statTxt+').', rarityInfo.color);
+    if (item.rarity==='epico' || item.rarity==='leggendario'){
+      showLootBanner(EQUIP_INFO[item.slot].icon, rarityInfo.name.toUpperCase()+' — '+EQUIP_INFO[item.slot].name, rarityInfo.color);
+      spellFlash(me.x, me.y, rarityInfo.color, 4);
+      addShake(0.2);
+      sfx.gem();
+    }
   } else {
     const salvage = 3+Math.floor(newPower*0.6);
     me.gold += salvage;
@@ -1919,6 +2032,20 @@ function showToast(text){
   clearTimeout(toastTimer);
   toastTimer = setTimeout(()=> el.classList.remove('show'), 2200);
 }
+let lootBannerTimer = null;
+function showLootBanner(icon, text, color){
+  const el = document.getElementById('loot-banner');
+  document.getElementById('loot-banner-icon').textContent = icon;
+  document.getElementById('loot-banner-text').textContent = text;
+  el.style.color = color;
+  el.style.borderColor = hexToRgba(color, 0.6);
+  el.style.boxShadow = '0 0 28px '+hexToRgba(color, 0.45)+', inset 0 0 20px '+hexToRgba(color, 0.12);
+  el.classList.remove('show');
+  void el.offsetWidth;
+  el.classList.add('show');
+  clearTimeout(lootBannerTimer);
+  lootBannerTimer = setTimeout(()=> el.classList.remove('show'), 2600);
+}
 
 function rollDamage(cls){
   const c = CLASSES[cls];
@@ -1973,7 +2100,7 @@ function performAttack(){
       const finalAmount = Math.round(amount*dmgMult);
       requestMonsterDamage(m.id, finalAmount);
       hitBurst(m.rx, m.ry, crit?'#ffe08a':'#fff');
-      if (crit){ sfx.crit(); addShake(0.32); addHitstop(0.07); } else { sfx.hit(); addShake(0.1); addHitstop(0.025); }
+      if (crit){ sfx.crit(); addShake(0.32); addHitstop(0.07); addCritFlash(); } else { sfx.hit(); addShake(0.1); addHitstop(0.025); }
       spawnFloatText(m.rx, m.ry-0.5, String(finalAmount)+(crit?'!':''), crit?'#ffcf5c':'#f2f2f2');
     }
     // effetto "proiettile" anche per il corpo a corpo: l'arma vola in avanti per un
@@ -2050,7 +2177,9 @@ function abilityCharge(c){
     me.y = me.y + fy*dist*(reached/steps);
   }
   me.invulnTimer = Math.max(me.invulnTimer, 0.35);
-  addShake(0.2);
+  addShake(0.28);
+  addHitstop(0.05);
+  spellFlash(me.x, me.y, '#dcdce0', 2.5);
   spawnFloatText(me.x, me.y-0.8, 'CARICA!', '#dcdce0');
   logLine('Hai caricato travolgendo '+hitIds.size+' nemici.', '#dcdce0');
 }
@@ -2072,7 +2201,9 @@ function abilityShadowStep(c){
     requestMonsterDamage(target.id, amount);
     hitBurst(target.rx, target.ry, '#ffe08a');
     sfx.crit();
-    addShake(0.2);
+    addCritFlash();
+    addShake(0.24);
+    addHitstop(0.06);
     spawnFloatText(target.rx, target.ry-0.5, amount+'!', '#ffcf5c');
     logLine('Passo furtivo: colpo critico garantito!', '#d8e6ff');
   } else {
@@ -2083,6 +2214,8 @@ function abilityShadowStep(c){
   me.invulnTimer = Math.max(me.invulnTimer, 1.4);
   smokeBurst(ox, oy, '#4a3a7a', 14);
   smokeBurst(me.x, me.y, '#4a3a7a', 14);
+  spellFlash(ox, oy, '#8a5cff', 3);
+  spellFlash(me.x, me.y, '#8a5cff', 3);
   spawnFloatText(me.x, me.y-0.8, 'PASSO FURTIVO', '#d8e6ff');
 }
 
@@ -2101,9 +2234,11 @@ function abilityShockwave(c){
       hit++;
     }
   }
-  shockwaves.push({ x:me.x, y:me.y, life:0.45, maxLife:0.45, color:'#8fd1ff' });
+  shockwaves.push({ x:me.x, y:me.y, life:0.45, maxLife:0.45, color:'#8fd1ff', core:true });
   sfx.boom();
-  addShake(0.45);
+  addShake(0.55);
+  addHitstop(0.09);
+  spellFlash(me.x, me.y, '#8fd1ff', 4.5); // impulso di luce ciano che illumina brevemente l'area colpita
   pfxBurst(me.x, me.y, {n:22, colors:['#8fd1ff','#cfe9ff'], speed:[2,7], size:[2,4.5], life:[0.3,0.7], add:true});
   pfxBurst(me.x, me.y, {n:10, colors:['#5a8a9a'], speed:[0.6,2], size:[3,6], life:[0.5,1], type:'smoke', grav:-0.5});
   spawnFloatText(me.x, me.y-0.8, "ONDA D'URTO", '#8fd1ff');
@@ -2124,6 +2259,7 @@ function abilityVolley(c){
     act.shotfx.send({x:me.x, y:me.y, vx, vy, glyph:c.projGlyph, color:c.projColor});
   }
   sfx.shootRanger();
+  spellFlash(me.x, me.y, '#d8e6b0', 2.2);
   spawnFloatText(me.x, me.y-0.8, 'RAFFICA!', '#d8e6b0');
 }
 
@@ -2328,26 +2464,63 @@ function drawGlyph(g, sx, sy, color, alpha, size, bold){
    vecchio glifo emoji, quindi il rendering non si rompe mai.
    --------------------------------------------------------------------- */
 const SPRITE_FILES = {
-  guerriero:'assets/sprites/hero_guerriero.png',
-  ladro:'assets/sprites/hero_ladro.png',
-  mago:'assets/sprites/hero_mago.png',
-  ranger:'assets/sprites/hero_ranger.png',
-  ratto:'assets/sprites/mon_ratto.png',
-  pipistrello:'assets/sprites/mon_pipistrello.png',
-  goblin:'assets/sprites/mon_goblin.png',
-  melma:'assets/sprites/mon_melma.png',
-  gelatina:'assets/sprites/mon_gelatina.png',
-  scheletro:'assets/sprites/mon_scheletro.png',
-  zombie:'assets/sprites/mon_zombie.png',
-  ragno:'assets/sprites/mon_ragno.png',
-  spettro:'assets/sprites/mon_spettro.png',
-  drago:'assets/sprites/mon_drago.png',
-  chest_closed:'assets/sprites/chest_closed.png',
-  chest_open:'assets/sprites/chest_open.png',
+  heroes_sheet:'assets/sprites/heroes_sheet.png',
+  monsters_sheet1:'assets/sprites/monsters_sheet1.png',
+  monsters_sheet2:'assets/sprites/monsters_sheet2.png',
+  chest_sheet:'assets/sprites/chest_sheet.png',
+  torch:'assets/sprites/torch.png',
+  stairs:'assets/sprites/stairs.png',
+  icon_lightning:'assets/sprites/icon_lightning.png',
+  icon_gem_blue:'assets/sprites/icon_gem_blue.png',
+  icon_shield_buff:'assets/sprites/icon_shield_buff.png',
+  icon_eye:'assets/sprites/icon_eye.png',
+  icon_gold:'assets/sprites/icon_gold.png',
+  icon_potion_hp:'assets/sprites/icon_potion_hp.png',
+  potenziamento_fretta:'assets/sprites/potenziamento_fretta.png',
+  furia:'assets/sprites/furia.png',
+  equip_greaves:'assets/sprites/equip_greaves.png',
+  icon_potion_mana:'assets/sprites/icon_potion_mana.png',
+  equip_necklace:'assets/sprites/equip_necklace.png',
+  equip_helm:'assets/sprites/equip_helm.png',
+  equip_ring:'assets/sprites/equip_ring.png',
+  equip_armor:'assets/sprites/equip_armor.png',
+  rianima:'assets/sprites/rianima.png',
+  powerupfocus:'assets/sprites/powerupfocus.png',
+  wall_stone:'assets/sprites/wall_stone.png',
+  wall_brick:'assets/sprites/wall_brick.png',
+  floor_stone:'assets/sprites/floor_stone.png',
+  floor_dirt:'assets/sprites/floor_dirt.png',
   merchant:'assets/sprites/merchant.png',
+  mon_spettro:'assets/sprites/mon_spettro.png',
+  mon_drago:'assets/sprites/mon_drago.png',
+  chest_closed:'assets/sprites/chest_sheet.png',
+  chest_open:'assets/sprites/chest_sheet.png',
 };
-/* tipo mostro -> chiave sprite (chi non ha sprite, es. 'o' orco, ricade sul glifo) */
+/* sprite sheet orizzontali: numero di celle in riga, tutte di larghezza uguale */
+const SPRITE_SHEET_INFO = { heroes_sheet:4, monsters_sheet1:4, monsters_sheet2:4, chest_sheet:2 };
+/* entità -> cella nel relativo sprite sheet (eroi, mostri, forzieri). Se lo sheet
+   manca o non è caricato, drawSprite ripiega sul glifo emoji di GLYPH_FALLBACK. */
+const ENTITY_SPRITES = {
+  guerriero:{sheet:'heroes_sheet',cell:0}, ladro:{sheet:'heroes_sheet',cell:1}, mago:{sheet:'heroes_sheet',cell:2}, ranger:{sheet:'heroes_sheet',cell:3},
+  ratto:{sheet:'monsters_sheet1',cell:0}, pipistrello:{sheet:'monsters_sheet1',cell:1}, goblin:{sheet:'monsters_sheet1',cell:2}, scheletro:{sheet:'monsters_sheet1',cell:3},
+  melma:{sheet:'monsters_sheet2',cell:0}, gelatina:{sheet:'monsters_sheet2',cell:1}, zombie:{sheet:'monsters_sheet2',cell:2}, ragno:{sheet:'monsters_sheet2',cell:3},
+  chest_closed:{sheet:'chest_sheet',cell:0}, chest_open:{sheet:'chest_sheet',cell:1},
+};
+/* tipo mostro -> chiave entità (chi non ha sprite, es. 'o' orco, ricade sul glifo) */
 const MONSTER_SPRITE = { r:'ratto', b:'pipistrello', g:'goblin', j:'melma', J:'gelatina', s:'scheletro', o:'orco', z:'zombie', S:'ragno', W:'spettro', D:'drago' };
+/* ritaglio delle parti visibili per le immagini generate su canvas enormi con
+   margini trasparenti (torce, scale, icone, texture di pavimenti e muri):
+   [x, y, w, h] in pixel della sorgente, determinati dall'area non trasparente */
+const SPRITE_CROP = {
+  torch:[516,132,401,480],
+  stairs:[486,111,437,542],
+  icon_lightning:[538,116,345,548],
+  icon_eye:[444,133,519,502],
+  wall_stone:[186,0,1037,768],
+  wall_brick:[368,45,643,678],
+  floor_stone:[350,67,709,638],
+  floor_dirt:[420,92,555,601],
+};
 /* glifi e colori originali, usati come fallback se lo sprite manca o non è caricato */
 const GLYPH_FALLBACK = {
   guerriero:{glyph:'⚔️',color:'#dcdce0'}, ladro:{glyph:'🥷',color:'#d8e6ff'}, mago:{glyph:'🧙',color:'#8fd1ff'}, ranger:{glyph:'🏹',color:'#d8e6b0'},
@@ -2357,6 +2530,24 @@ const GLYPH_FALLBACK = {
   chest_closed:{glyph:'▣',color:'#d4af37'}, chest_open:{glyph:'▢',color:'#7a6a45'}, merchant:{glyph:'🏪',color:'#d4af37'},
 };
 const SPRITES = {}; // chiave -> Image (popolato da loadSprites)
+/* texture di pavimento e muro pre-ridotte a 64x64 (una sola volta, all'avvio):
+   il crop taglia i margini trasparenti delle immagini AI e la scalatura morbida
+   evita l'effetto "neve" quando vengono ridotte alla dimensione di una cella */
+const SPRITE_TILES = {};
+function prepareTileTextures(){
+  for (const key of ['wall_stone','wall_brick','floor_stone','floor_dirt']){
+    const img = SPRITES[key];
+    if (!img || !img.complete || !img.naturalWidth) continue;
+    const c = SPRITE_CROP[key];
+    const sX = c?c[0]:0, sY = c?c[1]:0, sW = c?c[2]:img.naturalWidth, sH = c?c[3]:img.naturalHeight;
+    const cvs = document.createElement('canvas');
+    cvs.width = 64; cvs.height = 64;
+    const cx = cvs.getContext('2d');
+    cx.imageSmoothingEnabled = true;
+    cx.drawImage(img, sX, sY, sW, sH, 0, 0, 64, 64);
+    SPRITE_TILES[key] = cvs;
+  }
+}
 const flashCanvas = document.createElement('canvas');
 flashCanvas.width = 64; flashCanvas.height = 64;
 const flashCtx = flashCanvas.getContext('2d');
@@ -2372,7 +2563,7 @@ function loadSprites(){
     img.onload = tick;
     img.onerror = tick; // mai bloccante: drawSprite ripiega sul glifo
     img.src = SPRITE_FILES[key];
-  })));
+  }))).then(()=>{ prepareTileTextures(); });
 }
 /* drawSprite(key, sx, sy, size, alpha, facing, flashT, opts)
    — stessi sx/sy/size/alpha delle chiamate drawGlyph esistenti (centro = cella)
@@ -2383,11 +2574,23 @@ function loadSprites(){
      ogni creatura ha il suo "andamento" caratteristico (puro stile, mai posizione) */
 function drawSprite(key, sx, sy, size, alpha, facing, flashT, opts){
   const fb = GLYPH_FALLBACK[key];
-  const img = SPRITES[key];
+  /* risoluzione della sorgente: se l'entità è su uno sprite sheet si ritaglia la
+     singola cella (4 celle per eroi/mostri, 2 per i forzieri); altrimenti si usa
+     l'immagine intera. Lo sheet è sempre preferito se caricato. */
+  const es = ENTITY_SPRITES[key];
+  let img = SPRITES[key];
+  let sX = 0, sY = 0, sW = 0, sH = 0;
+  if (es && SPRITE_SHEET_INFO[es.sheet] && SPRITES[es.sheet] && SPRITES[es.sheet].complete && SPRITES[es.sheet].naturalWidth){
+    img = SPRITES[es.sheet];
+    sW = img.naturalWidth / SPRITE_SHEET_INFO[es.sheet];
+    sH = img.naturalHeight;
+    sX = es.cell * sW;
+  }
   if (!img || !img.complete || !img.naturalWidth){
     if (fb) drawGlyph(fb.glyph, sx, sy, fb.color, alpha, size, true);
     return;
   }
+  const srcW = sW || img.naturalWidth, srcH = sH || img.naturalHeight;
   const o = opts||{};
   const t = torchClock;
   const phase = (o.phase||0)*2*Math.PI;
@@ -2447,20 +2650,20 @@ function drawSprite(key, sx, sy, size, alpha, facing, flashT, opts){
     // scala sempre lo sprite sorgente alle dimensioni del canvas di flash (64x64),
     // altrimenti sprite non quadrati o non-64px risultano tagliati/disallineati
     flashCtx.clearRect(0,0,flashCanvas.width,flashCanvas.height);
-    flashCtx.drawImage(img, 0, 0, flashCanvas.width, flashCanvas.height);
+    flashCtx.drawImage(img, sX, sY, srcW, srcH, 0, 0, flashCanvas.width, flashCanvas.height);
     flashCtx.globalCompositeOperation = 'source-atop';
     flashCtx.fillStyle = o.flashColor||'#ffffff';
     flashCtx.fillRect(0,0,flashCanvas.width,flashCanvas.height);
     flashCtx.globalCompositeOperation = 'source-over';
     ctx.drawImage(flashCanvas, -half, -half, size, size);
   } else {
-    ctx.drawImage(img, -half, -half, size, size);
+    ctx.drawImage(img, sX, sY, srcW, srcH, -half, -half, size, size);
   }
   // rim-light dorato pulsante sui boss: un secondo passaggio silhouette-only, additivo
   if (boss){
     const rimK = 0.35+0.25*Math.sin(t*3+phase);
     flashCtx.clearRect(0,0,flashCanvas.width,flashCanvas.height);
-    flashCtx.drawImage(img, 0, 0, flashCanvas.width, flashCanvas.height);
+    flashCtx.drawImage(img, sX, sY, srcW, srcH, 0, 0, flashCanvas.width, flashCanvas.height);
     flashCtx.globalCompositeOperation = 'source-atop';
     flashCtx.fillStyle = '#ffcf80';
     flashCtx.fillRect(0,0,flashCanvas.width,flashCanvas.height);
@@ -2474,6 +2677,32 @@ function drawSprite(key, sx, sy, size, alpha, facing, flashT, opts){
   ctx.restore();
   ctx.globalAlpha = 1;
 }
+
+/* drawStaticSprite(key, sx, sy, size, alpha, fallbackGlyph, fallbackColor)
+   — sprite singolo non animato (torce, scale, icone, drop di oggetti): se il PNG
+   non è caricato ripiega su drawGlyph con il glifo emoji originale, quindi il
+   rendering non si rompe mai. */
+function drawStaticSprite(key, sx, sy, size, alpha, fallbackGlyph, fallbackColor){
+  const img = SPRITES[key];
+  if (img && img.complete && img.naturalWidth){
+    const c = SPRITE_CROP[key];
+    const sX = c?c[0]:0, sY = c?c[1]:0, sW = c?c[2]:img.naturalWidth, sH = c?c[3]:img.naturalHeight;
+    const prevSmooth = ctx.imageSmoothingEnabled;
+    ctx.imageSmoothingEnabled = true; // i PNG "fotografici" scendono meglio col filtro
+    ctx.globalAlpha = alpha;
+    ctx.drawImage(img, sX, sY, sW, sH, sx-size/2, sy-size/2, size, size);
+    ctx.globalAlpha = 1;
+    ctx.imageSmoothingEnabled = prevSmooth;
+  } else {
+    drawGlyph(fallbackGlyph, sx, sy, fallbackColor, alpha, size, true);
+  }
+}
+/* Attributi onerror standard per gli <img> con fallback emoji accanto nel DOM
+   (stesso pattern degli equip slot): se il PNG non carica, l'immagine rotta viene
+   nascosta e lo span col glifo originale diventa visibile. IMG_FALLBACK_ATTR_FAIL
+   marca anche dataset.failed, così updateHUD non ri-mostra un'immagine rotta. */
+const IMG_FALLBACK_ATTR = " onerror=\"this.style.display='none'; this.nextElementSibling.style.display='inline';\"";
+const IMG_FALLBACK_ATTR_FAIL = " onerror=\"this.dataset.failed='1'; this.style.display='none'; this.nextElementSibling.style.display='inline';\"";
 
 /* ---------------------------------------------------------------------
    9d. Audio procedurale (Web Audio API) — nessun file esterno
@@ -2589,10 +2818,24 @@ function heartbeatTick(dt){
    9e. Particelle, fendenti d'arma e schermo shake — puro effetto visivo
    --------------------------------------------------------------------- */
 const particles = [];
+// scaling adattivo delle performance: dichiarato qui (prima di ogni uso) per sicurezza,
+// aggiornato ogni frame in base al tempo medio di rendering
+let perfScale = 1;
+let _perfSmoothMs = 16.7;
+function updatePerfScale(frameMs){
+  _perfSmoothMs = _perfSmoothMs*0.9 + frameMs*0.1;
+  if (_perfSmoothMs > 26) perfScale = 0.45;
+  else if (_perfSmoothMs > 19) perfScale = 0.7;
+  else perfScale = 1;
+}
+
 function pfxBurst(x, y, opts){
   const { n=8, colors=['#dcdce0'], speed=[1.5,4.5], angle=Math.PI*2, life=[0.25,0.6],
         size=[1.5,3.5], type='dot', grav=3, drag=1, add=false, alpha=1, up=0 } = opts;
-  for (let i=0;i<n;i++){
+  // scala il numero di particelle in base al carico corrente (perfScale), mai sotto 1:
+  // così un'esplosione resta sempre visibile anche in modalità performance ridotta
+  const realN = Math.max(1, Math.round(n*perfScale));
+  for (let i=0;i<realN;i++){
     const a = Math.random()*angle;
     const s = speed[0]+Math.random()*(speed[1]-speed[0]);
     particles.push({
@@ -2631,8 +2874,35 @@ const slashes = []; // {x,y,ang,life,maxLife,color,len} — arco vettoriale di s
 function spawnSlash(x,y,ang,color){
   slashes.push({x, y, ang, life:0.2, maxLife:0.2, color, len:0.6});
 }
+// luci puntuali temporanee (es. lampo di un'abilità): {x,y,color,r,life,maxLife}
+const spellFlashes = [];
+function spellFlash(x,y,color,r){
+  spellFlashes.push({x, y, color, r:r||3.5, life:0.35, maxLife:0.35});
+}
+function updateSpellFlashes(dt){
+  for (let i=spellFlashes.length-1;i>=0;i--){
+    spellFlashes[i].life -= dt;
+    if (spellFlashes[i].life<=0) spellFlashes.splice(i,1);
+  }
+}
+function renderSpellFlashes(tile, camX, camY){
+  ctx.globalCompositeOperation = 'lighter';
+  for (const f of spellFlashes){
+    const t = 1 - f.life/f.maxLife;
+    const sx=(f.x-camX)*tile, sy=(f.y-camY)*tile;
+    const R = tile*f.r*(0.6+t*0.5);
+    const a = Math.max(0, 1-t*1.3);
+    const g = ctx.createRadialGradient(sx, sy, 0, sx, sy, R);
+    g.addColorStop(0, hexToRgba(f.color, 0.35*a));
+    g.addColorStop(0.5, hexToRgba(f.color, 0.14*a));
+    g.addColorStop(1, hexToRgba(f.color, 0));
+    ctx.fillStyle = g;
+    ctx.fillRect(sx-R, sy-R, R*2, R*2);
+  }
+  ctx.globalCompositeOperation = 'source-over';
+}
 function updateParticles(dt){
-  if (particles.length>900) particles.splice(0, particles.length-900);
+  if (particles.length>900*perfScale) particles.splice(0, particles.length-Math.floor(900*perfScale));
   for (let i=particles.length-1;i>=0;i--){
     const p = particles[i];
     p.life -= dt;
@@ -2699,6 +2969,9 @@ let shakeTrauma = 0; // trauma-based shake: decade più naturale di un semplice 
 function addShake(amp){ shakeAmp = Math.min(1.2, Math.max(shakeAmp, amp)); shakeTrauma = Math.min(1, shakeTrauma + amp*0.9); }
 let hitstopTimer = 0;
 function addHitstop(t){ hitstopTimer = Math.max(hitstopTimer, t); }
+let critFlashTimer = 0;
+const CRIT_FLASH_TIME = 0.16;
+function addCritFlash(){ critFlashTimer = CRIT_FLASH_TIME; }
 
 /* Rilevamento morti lato client: l'host rimuove il mostro dalla simulazione,
    quindi chi non è host vede solo la scomparsa — qui la trasformiamo in una
@@ -2771,11 +3044,23 @@ function drawWallBlock(layout, tx, ty, sx, sy, tile, alpha, visible, mask){
   const shade = 0.86 + (hash%18)/100;
   const dim = visible ? 1 : 0.46;
   const r = Math.round(96*shade*dim), g = Math.round(76*shade*dim), b = Math.round(52*shade*dim);
-  ctx.globalAlpha = alpha;
-  // blocco pieno: riempie l'intera cella, quindi combacia sempre perfettamente con il
-  // vicino — niente più spazi vuoti come con i glifi di testo a linee (─ │ ecc.)
-  ctx.fillStyle = `rgb(${r},${g},${b})`;
-  ctx.fillRect(sx-0.6, sy-0.6, tile+1.2, tile+1.2);
+  // texture della pietra: wall_stone per tutti i muri (fallback sul colore pieno)
+  const wallTex = SPRITE_TILES['wall_stone'];
+    ctx.globalAlpha = alpha;
+    if (wallTex){
+      // stessa attenuazione del colore pieno: scale l'alpha per la zona non visibile
+      ctx.globalAlpha = alpha*dim;
+      const prevSmooth = ctx.imageSmoothingEnabled;
+      ctx.imageSmoothingEnabled = true;
+      ctx.drawImage(wallTex, sx-0.6, sy-0.6, tile+1.2, tile+1.2);
+      ctx.imageSmoothingEnabled = prevSmooth;
+      ctx.globalAlpha = alpha;
+    } else {
+    // blocco pieno: riempie l'intera cella, quindi combacia sempre perfettamente con il
+    // vicino — niente più spazi vuoti come con i glifi di testo a linee (─ │ ecc.)
+    ctx.fillStyle = `rgb(${r},${g},${b})`;
+    ctx.fillRect(sx-0.6, sy-0.6, tile+1.2, tile+1.2);
+  }
   // smusso 3D: bordo chiaro in alto, ombra in basso, per dare volume alla pietra
   ctx.fillStyle = visible ? 'rgba(255,232,196,0.12)' : 'rgba(255,232,196,0.05)';
   ctx.fillRect(sx, sy, tile, Math.max(1, tile*0.1));
@@ -2821,6 +3106,13 @@ const DUST_MOTES = Array.from({length:26}, (_,i)=>({
   ox: hashStr('dust'+i)%1000/1000, oy: (hashStr('dusty'+i)%1000)/1000,
   speed: 0.15+ (hashStr('dusts'+i)%100)/300, ph: (hashStr('dustp'+i)%628)/100,
 }));
+// banchi di nebbia ambientale: pochi "blob" morbidi che scivolano lentamente sullo schermo,
+// più densi e più numerosi man mano che si scende — danno atmosfera senza costare quasi nulla
+const FOG_BANKS = Array.from({length:5}, (_,i)=>({
+  ox: hashStr('fog'+i)%1000/1000, oy: (hashStr('fogy'+i)%1000)/1000,
+  speed: 0.006+ (hashStr('fogs'+i)%100)/40000, ph: (hashStr('fogp'+i)%628)/100,
+  rScale: 0.7+(hashStr('fogr'+i)%100)/140,
+}));
 let lastCamX = 0, lastCamY = 0;
 function render(dt){
   torchClock += dt;
@@ -2863,7 +3155,7 @@ function render(dt){
   // pulviscolo atmosferico: pochi motes ancorati allo schermo, fluttuano piano — dà profondità
   // all'aria senza un vero particle system (costo quasi nullo, nessuna allocazione per frame)
   ctx.globalCompositeOperation = 'lighter';
-  for (const dmo of DUST_MOTES){
+  if (perfScale>0.5) for (const dmo of DUST_MOTES){
     const fx = (dmo.ox + Math.sin(torchClock*dmo.speed*0.3+dmo.ph)*0.06) % 1;
     const fy = (dmo.oy + torchClock*dmo.speed*0.02) % 1;
     const mx = fx*cssW, my = fy*cssH;
@@ -2890,7 +3182,20 @@ function render(dt){
       if (tval === T_WALL){
         drawWallBlock(layout, tx, ty, sx, sy, tile, alpha, visible, computeWallMask(layout,tx,ty));
       } else if (tval === T_STAIRS){
-        // scale: bagliore dorato pulsante + fascio di luce verticale, più teatrale
+        // scale: lastra di pietra sotto (le scale appoggiano sul pavimento), poi
+        // bagliore dorato pulsante + fascio di luce verticale, più teatrale
+        const stFloorTex = SPRITE_TILES['floor_stone'];
+        ctx.globalAlpha = alpha;
+        if (stFloorTex){
+          const prevSmooth = ctx.imageSmoothingEnabled;
+          ctx.imageSmoothingEnabled = true;
+          ctx.drawImage(stFloorTex, sx-0.6, sy-0.6, tile+1.2, tile+1.2);
+          ctx.imageSmoothingEnabled = prevSmooth;
+        } else {
+          ctx.fillStyle = '#120e09';
+          ctx.fillRect(sx-0.6, sy-0.6, tile+1.2, tile+1.2);
+        }
+        ctx.globalAlpha = 1;
         const stPulse = 0.55+0.45*Math.sin(torchClock*2.4);
         ctx.globalCompositeOperation = 'lighter';
         const beamW = tile*0.55;
@@ -2906,7 +3211,7 @@ function render(dt){
         ctx.fillStyle = stg;
         ctx.fillRect(sx-tile*0.4, sy-tile*0.4, tile*1.8, tile*1.8);
         ctx.globalCompositeOperation = 'source-over';
-        drawGlyph('🪜', sx+tile/2, sy+tile/2, '#e8a13d', alpha, Math.round(tile*0.8), true);
+        drawStaticSprite('stairs', sx+tile/2, sy+tile/2, Math.round(tile*0.8), alpha, '🪜', '#e8a13d');
         if (Math.random() < dt*1.8){
           particles.push({
             x: tx+0.5+(Math.random()-0.5)*0.7, y: ty+1,
@@ -2917,34 +3222,44 @@ function render(dt){
           });
         }
       } else {
-        if (layout.doors.has(key)){
-          drawGlyph('▤', sx+tile/2, sy+tile/2, visible?'#8a6a3d':'#4a3d24', alpha*0.9, Math.round(tile*0.62));
+        const texHash = ((tx*374761393 + ty*668265263) >>> 0) % 100;
+        const inSanctuary = insideZone(layout.safeZone, tx+0.5, ty+0.5);
+        // lastra di pavimento: floor_stone su OGNI cella pavimento, anche sotto le
+        // porte e i glifi decorativi, con la tinta azzurra del santuario sopra;
+        // fallback sulle vecchie tonalità piatte se il PNG non è caricato
+        const floorTex = SPRITE_TILES['floor_stone'];
+        ctx.globalAlpha = alpha;
+        if (floorTex){
+          const prevSmooth = ctx.imageSmoothingEnabled;
+          ctx.imageSmoothingEnabled = true;
+          ctx.drawImage(floorTex, sx-0.6, sy-0.6, tile+1.2, tile+1.2);
+          ctx.imageSmoothingEnabled = prevSmooth;
         } else {
-          const texHash = ((tx*374761393 + ty*668265263) >>> 0) % 100;
-          const inSanctuary = insideZone(layout.safeZone, tx+0.5, ty+0.5);
-          // lastra di pavimento: tonalità leggermente diverse per cella
-          ctx.globalAlpha = alpha;
-          ctx.fillStyle = inSanctuary ? '#15242c' : (texHash%2===0 ? '#120e09' : '#140f0b');
+          ctx.fillStyle = texHash%2===0 ? '#120e09' : '#140f0b';
           ctx.fillRect(sx-0.6, sy-0.6, tile+1.2, tile+1.2);
-          // giunti scuri fra le lastre (righe in basso e a destra)
-          ctx.strokeStyle = 'rgba(0,0,0,0.32)';
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.moveTo(sx, sy+tile); ctx.lineTo(sx+tile, sy+tile);
-          ctx.moveTo(sx+tile, sy); ctx.lineTo(sx+tile, sy+tile);
-          ctx.stroke();
-          // pietrisco e schegge occasionali
-          if (texHash>84){
-            const px = sx + ((texHash*7)%100)/100*(tile-4)+2, py = sy + ((texHash*13)%100)/100*(tile-4)+2;
-            ctx.fillStyle = 'rgba(0,0,0,0.35)';
-            ctx.fillRect(px, py, 2, 2);
-            ctx.fillStyle = 'rgba(255,220,160,0.06)';
-            ctx.fillRect(px, py-1, 2, 1);
-          }
-          const dotColor = inSanctuary ? '#8fc4d8' : (texHash<40 ? '#7a6a52' : '#71614c');
-          drawGlyph('·', sx+tile/2, sy+tile/2, dotColor, alpha*(texHash<70?0.5:0.8), Math.round(tile*0.5));
-          ctx.globalAlpha = 1;
         }
+        if (inSanctuary){
+          ctx.fillStyle = 'rgba(21,36,44,'+(alpha*0.9)+')';
+          ctx.fillRect(sx-0.6, sy-0.6, tile+1.2, tile+1.2);
+        }
+        // giunti scuri fra le lastre (righe in basso e a destra)
+        ctx.strokeStyle = 'rgba(0,0,0,0.32)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(sx, sy+tile); ctx.lineTo(sx+tile, sy+tile);
+        ctx.moveTo(sx+tile, sy); ctx.lineTo(sx+tile, sy+tile);
+        ctx.stroke();
+        // pietrisco e schegge occasionali
+        if (texHash>84){
+          const px = sx + ((texHash*7)%100)/100*(tile-4)+2, py = sy + ((texHash*13)%100)/100*(tile-4)+2;
+          ctx.fillStyle = 'rgba(0,0,0,0.35)';
+          ctx.fillRect(px, py, 2, 2);
+          ctx.fillStyle = 'rgba(255,220,160,0.06)';
+          ctx.fillRect(px, py-1, 2, 1);
+        }
+        const dotColor = inSanctuary ? '#8fc4d8' : (texHash<40 ? '#7a6a52' : '#71614c');
+        drawGlyph('·', sx+tile/2, sy+tile/2, dotColor, alpha*(texHash<70?0.5:0.8), Math.round(tile*0.5));
+        ctx.globalAlpha = 1;
       }
       const chest = layout.chestSpots.find(c=>c.x===tx&&c.y===ty);
       if (chest){
@@ -2980,11 +3295,7 @@ function render(dt){
     ctx.fillStyle = tg;
     ctx.fillRect(sx-R, sy-R, R*2, R*2);
     ctx.globalCompositeOperation = 'source-over';
-    ctx.globalAlpha = 0.95*fl;
-    ctx.font = Math.round(tile*0.5)+'px '+FONT_STACK;
-    ctx.textAlign='center'; ctx.textBaseline='middle';
-    ctx.fillText('🔥', sx, sy-tile*0.12);
-    ctx.globalAlpha = 1;
+    drawStaticSprite('torch', sx, sy-tile*0.12, Math.round(tile*0.5), 0.95*fl, '🔥', '#ffb968');
     // scintilla occasionale che sale dalla fiamma, non un vero emitter per non appesantire
     if (Math.random() < dt*1.4){
       particles.push({
@@ -3003,7 +3314,8 @@ function render(dt){
     const sx=(it.x+0.5-camX)*tile, sy=(it.y+0.5-camY)*tile;
     if (it.kind==='power'){
       const p = POWERUP_TYPES[it.buff];
-      drawGlyph(p.glyph, sx, sy, p.color, flick, Math.round(tile*0.68), true);
+      if (p.sprite) drawStaticSprite(p.sprite, sx, sy, Math.round(tile*0.68), flick, p.glyph, p.color);
+      else drawGlyph(p.glyph, sx, sy, p.color, flick, Math.round(tile*0.68), true);
     } else if (it.kind==='equip'){
       const rarityInfo = RARITY_TIERS.find(r=>r.key===it.rarity) || RARITY_TIERS[0];
       if (it.rarity==='epico' || it.rarity==='leggendario'){
@@ -3012,13 +3324,53 @@ function render(dt){
         ctx.beginPath(); ctx.arc(sx, sy, tile*0.42, 0, Math.PI*2); ctx.fill();
         ctx.globalAlpha = 1;
       }
-      drawGlyph(EQUIP_INFO[it.slot].icon, sx, sy, rarityInfo.color, flick, Math.round(tile*0.68), true);
+      const eqPickup = it.slot==='helm'?'equip_helm':it.slot==='necklace'?'equip_necklace':it.slot==='armor'?'equip_armor':it.slot==='ring'?'equip_ring':it.slot==='greaves'?'equip_greaves':null;
+      if (eqPickup) drawStaticSprite(eqPickup, sx, sy, Math.round(tile*0.68), flick, EQUIP_INFO[it.slot].icon, rarityInfo.color);
+      else drawGlyph(EQUIP_INFO[it.slot].icon, sx, sy, rarityInfo.color, flick, Math.round(tile*0.68), true);
+    } else if (it.kind==='gem'){
+      drawStaticSprite('icon_gem_blue', sx, sy, Math.round(tile*0.62), flick, ITEM_GLYPHS.gem, ITEM_COLORS.gem);
+    } else if (it.kind==='gold'){
+      drawStaticSprite('icon_gold', sx, sy, Math.round(tile*0.62), flick, ITEM_GLYPHS.gold, ITEM_COLORS.gold);
+    } else if (it.kind==='potion'){
+      drawStaticSprite('icon_potion_hp', sx, sy, Math.round(tile*0.62), flick, ITEM_GLYPHS.potion, ITEM_COLORS.potion);
+    } else if (it.kind==='manapotion'){
+      drawStaticSprite('icon_potion_mana', sx, sy, Math.round(tile*0.62), flick, ITEM_GLYPHS.manapotion, ITEM_COLORS.manapotion);
     } else {
       drawGlyph(ITEM_GLYPHS[it.kind]||'?', sx, sy, ITEM_COLORS[it.kind]||'#fff', flick, Math.round(tile*0.62), true);
     }
   }
 
   // monsters
+  ctx.globalCompositeOperation = 'lighter';
+  for (const m of world.monsters){
+    const key = Math.floor(m.rx)+','+Math.floor(m.ry);
+    if (!me.isSpectator && !world.visibleSet.has(key)) continue;
+    const sx=(m.rx-camX)*tile, sy=(m.ry-camY)*tile;
+    const t = MONSTER_TYPES[m.type];
+    // luce puntuale colorata dietro ogni creatura: usa il colore del tipo mostro,
+    // pulsa piano; i boss proiettano un alone molto più ampio e intenso
+    const mR = tile*(t.boss?3.4:1.15);
+    const mPulse = 0.7+0.3*Math.sin(torchClock*(t.boss?3.4:2.2)+hashStr(String(m.id))%10);
+    const mg = ctx.createRadialGradient(sx, sy, 0, sx, sy, mR);
+    mg.addColorStop(0, hexToRgba(t.color, (t.boss?0.28:0.13)*mPulse));
+    mg.addColorStop(1, hexToRgba(t.color, 0));
+    ctx.fillStyle = mg;
+    ctx.fillRect(sx-mR, sy-mR, mR*2, mR*2);
+    // telegraph d'attacco boss: anello rosso che si contrae verso il boss durante la carica.
+    // host e client vedono lo stesso booleano `_winding`; ricostruiamo un timer locale al volo
+    // (non serve sincronizzarne i decimi di secondo, l'importante è la leggibilità del preavviso)
+    if (t.boss && m._winding){
+      if (m._windLocalStart==null){ m._windLocalStart = performance.now(); spellFlash(m.rx, m.ry, '#ff3c32', 3); }
+      const windProg = clamp((performance.now()-m._windLocalStart)/500, 0, 1);
+      const ringR = tile*(1.9 - windProg*1.3);
+      ctx.strokeStyle = 'rgba(255,60,50,'+(0.55+0.35*Math.sin(torchClock*22))+')';
+      ctx.lineWidth = tile*0.06;
+      ctx.beginPath(); ctx.arc(sx, sy, Math.max(tile*0.3,ringR), 0, Math.PI*2); ctx.stroke();
+    } else if (t.boss){
+      m._windLocalStart = null;
+    }
+  }
+  ctx.globalCompositeOperation = 'source-over';
   for (const m of world.monsters){
     const key = Math.floor(m.rx)+','+Math.floor(m.ry);
     if (!me.isSpectator && !world.visibleSet.has(key)) continue;
@@ -3172,7 +3524,7 @@ function render(dt){
   // local player (always on top)
   if (me.isSpectator){
     const sx=(me.x-camX)*tile, sy=(me.y-camY)*tile;
-    drawGlyph('👁️', sx, sy, '#8fd1ff', 0.7, Math.round(tile*0.6), true);
+    drawStaticSprite('icon_eye', sx, sy, Math.round(tile*0.6), 0.7, '👁️', '#8fd1ff');
   } else {
     const sx=(me.x-camX)*tile, sy=(me.y-camY)*tile;
     // tracciamento visivo locale (solo rendering): flash sul danno
@@ -3199,7 +3551,23 @@ function render(dt){
     }
   }
 
+  renderSpellFlashes(tile, camX, camY);
   renderParticles(tile, camX, camY);
+
+  // nebbia ambientale: più densa in profondità, banchi morbidi che scivolano piano sullo schermo
+  const fogDensity = clamp(((world.depth||1)-2)/14, 0, 1);
+  if (fogDensity>0.02 && perfScale>0.6){
+    for (const fb of FOG_BANKS){
+      const fx = (fb.ox + torchClock*fb.speed + Math.sin(torchClock*0.05+fb.ph)*0.04) % 1.3 - 0.15;
+      const fy = (fb.oy + Math.sin(torchClock*0.03+fb.ph*2)*0.03) % 1;
+      const R = Math.max(cssW,cssH)*0.5*fb.rScale;
+      const fg = ctx.createRadialGradient(fx*cssW, fy*cssH, 0, fx*cssW, fy*cssH, R);
+      fg.addColorStop(0, 'rgba(150,160,150,'+(0.10*fogDensity)+')');
+      fg.addColorStop(1, 'rgba(150,160,150,0)');
+      ctx.fillStyle = fg;
+      ctx.fillRect(0,0,cssW,cssH);
+    }
+  }
 
   if (dmgFlashTimer>0){
     const k = dmgFlashTimer/0.35;
@@ -3235,6 +3603,28 @@ function render(dt){
     depthFadeTimer = Math.max(0, depthFadeTimer-dt);
     const k = depthFadeTimer/DEPTH_FADE_TIME;
     ctx.fillStyle = 'rgba(4,3,1,'+k+')';
+    ctx.fillRect(0,0,cssW,cssH);
+  }
+
+  // "chromatic aberration" sui colpi critici: invece di ricampionare il canvas (rischioso/costoso
+  // per via del self-sampling), simuliamo l'effetto con due strisce di tinta ciano/rosso ai bordi
+  // opposti più una vampata bianca centrale — leggero, sicuro, e visivamente molto simile
+  if (critFlashTimer>0){
+    critFlashTimer = Math.max(0, critFlashTimer-dt);
+    const k = critFlashTimer/CRIT_FLASH_TIME;
+    ctx.save();
+    ctx.globalCompositeOperation = 'screen';
+    const edgeW = cssW*0.06*k;
+    let gL = ctx.createLinearGradient(0,0,edgeW,0);
+    gL.addColorStop(0, 'rgba(255,60,60,'+(0.28*k)+')');
+    gL.addColorStop(1, 'rgba(255,60,60,0)');
+    ctx.fillStyle = gL; ctx.fillRect(0,0,edgeW,cssH);
+    let gR = ctx.createLinearGradient(cssW,0,cssW-edgeW,0);
+    gR.addColorStop(0, 'rgba(80,200,255,'+(0.28*k)+')');
+    gR.addColorStop(1, 'rgba(80,200,255,0)');
+    ctx.fillStyle = gR; ctx.fillRect(cssW-edgeW,0,edgeW,cssH);
+    ctx.restore();
+    ctx.fillStyle = 'rgba(255,255,255,'+(0.09*k)+')';
     ctx.fillRect(0,0,cssW,cssH);
   }
 }
@@ -3306,6 +3696,15 @@ function updateLocalPlayer(dt){
     me._stepAcc = (me._stepAcc||0)+dt;
     if (me._stepAcc>0.26){ me._stepAcc=0; sfx.step(); stepDust(me.x, me.y, dx, dy); }
     tryMoveEntity(world.layout, me, dx, dy, dt, 0.24);
+    // attraversamento porta: un piccolo "swoosh" d'aria quando si passa da una stanza all'altra
+    const doorKey = Math.floor(me.x)+','+Math.floor(me.y);
+    if (world.layout.doors.has(doorKey) && me._lastDoorKey !== doorKey){
+      me._lastDoorKey = doorKey;
+      pfxBurst(me.x, me.y, {n:6, colors:['#8a6a3d','#c9a86a'], speed:[1.5,3.5], size:[1.5,3], life:[0.2,0.4], type:'smoke', grav:0});
+      spellFlash(me.x, me.y, '#8a6a3d', 1.6);
+    } else if (!world.layout.doors.has(doorKey)){
+      me._lastDoorKey = null;
+    }
   }
 
   if (keys.attack) performAttack();
@@ -3360,7 +3759,7 @@ function updateProjectiles(dt){
           const finalAmount = Math.round(amount*(pr.dmgMult||1));
           requestMonsterDamage(m.id, finalAmount);
           hitBurst(m.rx, m.ry, crit?'#ffe08a':pr.color);
-          if (crit){ sfx.crit(); addShake(0.28); addHitstop(0.06); } else { sfx.hit(); addShake(0.09); addHitstop(0.02); }
+          if (crit){ sfx.crit(); addShake(0.28); addHitstop(0.06); addCritFlash(); } else { sfx.hit(); addShake(0.09); addHitstop(0.02); }
           spawnFloatText(m.rx, m.ry-0.5, String(finalAmount)+(crit?'!':''), crit?'#ffcf5c':'#f2f2f2');
           hit = true; break;
         }
@@ -3464,7 +3863,14 @@ function updateHUD(){
     const abTouch = document.getElementById('ability-touch-btn');
     abTouch.classList.toggle('show', isTouch);
     abTouch.classList.toggle('oncooldown', me.abilityTimer>0);
-    if (abTouch.textContent !== CLASSES[me.cls].ability.icon) abTouch.textContent = CLASSES[me.cls].ability.icon;
+    const tIcon = CLASSES[me.cls].ability.icon;
+    const tImg = document.getElementById('ability-touch-img');
+    const tFall = document.getElementById('ability-touch-fallback');
+    if (tImg && tFall){
+      const isLt = tIcon === '⚡';
+      if (isLt && !tImg.dataset.failed){ tImg.style.display=''; tFall.style.display='none'; }
+      else { tImg.style.display='none'; tFall.style.display=''; if (tFall.textContent !== tIcon) tFall.textContent = tIcon; }
+    }
   }
   document.getElementById('hero-class-btn').textContent = CLASSES[me.cls].icon;
   {
@@ -3473,7 +3879,13 @@ function updateHUD(){
     const onCd = me.abilityTimer > 0;
     abBtn.classList.toggle('oncooldown', onCd);
     document.getElementById('ability-cd').textContent = onCd ? Math.ceil(me.abilityTimer) : '';
-    if (abBtn.childNodes[0] && abBtn.childNodes[0].nodeType===3) abBtn.childNodes[0].textContent = ab.icon;
+    const abImg = document.getElementById('ability-icon-img');
+    const abFall = document.getElementById('ability-icon-fallback');
+    if (abImg && abFall){
+      const isLt = ab.icon === '⚡';
+      if (isLt && !abImg.dataset.failed){ abImg.style.display=''; abFall.style.display='none'; }
+      else { abImg.style.display='none'; abFall.style.display=''; if (abFall.textContent !== ab.icon) abFall.textContent = ab.icon; }
+    }
     abBtn.title = ab.name+' (F): '+ab.desc+' — recupero '+ab.cooldown+'s'+(ab.manaCost?', costa '+ab.manaCost+' mana':'');
   }
   document.getElementById('portrait-icon').textContent = CLASSES[me.cls].icon;
@@ -3504,7 +3916,13 @@ function updateHUD(){
   let buffsHtml = '';
   for (const k of POWERUP_KEYS){
     if (me.buffs[k] > 0){
-      buffsHtml += '<span class="buff-chip" title="'+POWERUP_TYPES[k].name+': '+POWERUP_TYPES[k].desc+'">'+POWERUP_TYPES[k].glyph+' '+Math.ceil(me.buffs[k])+'s</span>';
+      const p = POWERUP_TYPES[k];
+      // i potenziamenti con uno sprite (Scudo, Fretta) usano il PNG col fallback sul
+      // glifo emoji; gli altri restano sui loro glifi originali
+      const iconHtml = p.sprite
+        ? '<img class="hud-icon" src="assets/sprites/'+p.sprite+'.png" alt=""'+IMG_FALLBACK_ATTR+'><span class="hud-icon-fallback">'+p.glyph+'</span>'
+        : p.glyph;
+      buffsHtml += '<span class="buff-chip" title="'+p.name+': '+p.desc+'">'+iconHtml+' '+Math.ceil(me.buffs[k])+'s</span>';
     }
   }
   if (buffsRow.__lastHtml !== buffsHtml){ buffsRow.innerHTML = buffsHtml; buffsRow.__lastHtml = buffsHtml; }
@@ -3513,10 +3931,11 @@ function refreshPeerList(){
   const wrap = document.getElementById('peers-list');
   const selfCls = CLASSES[me.cls];
   const selfLabel = me.isSpectator ? 'Osservatore (tu)' : (escapeHtml(me.name)+' — '+selfCls.name+' (tu)'+(me.peerId===hostId?', custode del mondo':''));
-  let html = '<div class="peer-row" title="'+selfLabel+'"><span class="peer-dot" data-peer="self" style="background:'+(me.isSpectator?'#8fd1ff':me.color)+';color:'+(me.isSpectator?'#8fd1ff':me.color)+'"></span><span>'+(me.isSpectator?'👁️ ':'')+escapeHtml(me.name)+' (tu)</span></div>';
+  const eyeImg = '<img class="hud-icon" src="assets/sprites/icon_eye.png" alt=""'+IMG_FALLBACK_ATTR+'><span class="hud-icon-fallback">👁️</span> ';
+  let html = '<div class="peer-row" title="'+selfLabel+'"><span class="peer-dot" data-peer="self" style="background:'+(me.isSpectator?'#8fd1ff':me.color)+';color:'+(me.isSpectator?'#8fd1ff':me.color)+'"></span><span>'+(me.isSpectator?eyeImg:'')+escapeHtml(me.name)+' (tu)</span></div>';
   for (const [pid,p] of remotePlayers){
     if (p.spectator){
-      html += '<div class="peer-row" title="'+escapeHtml(p.name||'???')+' — osservatore"><span class="peer-dot" data-peer="'+pid+'" style="background:#8fd1ff;color:#8fd1ff"></span><span>👁️ '+escapeHtml(p.name||'???')+'</span></div>';
+      html += '<div class="peer-row" title="'+escapeHtml(p.name||'???')+' — osservatore"><span class="peer-dot" data-peer="'+pid+'" style="background:#8fd1ff;color:#8fd1ff"></span><span>'+eyeImg+escapeHtml(p.name||'???')+'</span></div>';
       continue;
     }
     const pCls = CLASSES[p.cls];
@@ -3755,7 +4174,7 @@ function buildTooltipHtml(obj, type){
     return (opened?'▢ <b>Forziere vuoto</b>':'▣ <b>Forziere</b><br><i>Premi E per aprirlo</i>');
   }
   if (type==='stairs') return '🪜 <b>Scale</b><br><i>Premi E per scendere: tutto il gruppo scende con te</i>';
-  if (type==='merchant') return '🏪 <b>Mercante</b><br><i>Premi E per comprare pozioni, potenziamenti o equipaggiamento</i>';
+  if (type==='merchant') return '<img class="hud-icon" src="assets/sprites/merchant.png" alt=""'+IMG_FALLBACK_ATTR+'><span class="hud-icon-fallback">🏪</span> <b>Mercante</b><br><i>Premi E per comprare pozioni, potenziamenti o equipaggiamento</i>';
   if (type==='player'){
     const c = CLASSES[obj.cls];
     if (obj.downed) return (c?c.icon:'@')+' <b>'+escapeHtml(obj.name||'???')+'</b><br><i style="color:#c1443a">A terra — tieni premuto E vicino a lui per rianimarlo</i>';
@@ -3869,7 +4288,7 @@ document.getElementById('hero-class-btn').addEventListener('click', ()=>{
   if (classPopover.classList.contains('show')){ classPopover.classList.remove('show'); return; }
   classPopover.innerHTML = CLASS_KEYS.map(k=>{
     const c = CLASSES[k];
-    return '<div class="class-opt" data-cls="'+k+'"><span class="ic">'+c.icon+'</span><span class="txt"><b>'+c.name+'</b><span>'+c.desc+'</span></span></div>';
+    return '<div class="class-opt" data-cls="'+k+'"><span class="ic"><img loading="lazy" src="assets/sprites/hero_'+k+'.png" alt=""'+IMG_FALLBACK_ATTR+'><span class="hud-icon-fallback">'+c.icon+'</span></span><span class="txt"><b>'+c.name+'</b><span>'+c.desc+'</span></span></div>';
   }).join('');
   classPopover.classList.add('show');
   classPopover.querySelectorAll('.class-opt').forEach(el=>{
@@ -3935,7 +4354,9 @@ function maybeShowInteractPrompt(){
   const should = onStairs || nearChest || nearMerchant || nearDowned;
   if (should && !interactPromptShown){
     interactPromptShown = true;
-    showInteractBtn(nearDowned ? 'Tieni premuto: rianima 💗' : (onStairs ? 'Scendi ⬇' : (nearMerchant ? 'Mercante 🏪' : 'Apri forziere ▣')));
+    const reviveIcon = '<img class="hud-icon" src="assets/sprites/rianima.png" alt=""'+IMG_FALLBACK_ATTR+'><span class="hud-icon-fallback">💗</span>';
+    const merchantIcon = '<img class="hud-icon" src="assets/sprites/merchant.png" alt=""'+IMG_FALLBACK_ATTR+'><span class="hud-icon-fallback">🏪</span>';
+    showInteractBtn(nearDowned ? reviveIcon+' Tieni premuto: rianima' : (onStairs ? 'Scendi ⬇' : (nearMerchant ? merchantIcon+' Mercante' : 'Apri forziere ▣')));
   } else if (!should && interactPromptShown){
     interactPromptShown = false;
     hideInteractBtn();
@@ -3953,7 +4374,7 @@ function showInteractBtn(label){
     interactBtnEl.addEventListener('pointercancel', ()=>{ keys.interact=false; });
     document.getElementById('hud').appendChild(interactBtnEl);
   }
-  interactBtnEl.textContent = label;
+  interactBtnEl.innerHTML = label;
   interactBtnEl.style.display = 'block';
   interactBtnEl.classList.remove('interact-pop');
   void interactBtnEl.offsetWidth;
@@ -3971,8 +4392,10 @@ function hideConnecting(){
 }
 
 let lastT = performance.now();
+// vedi updatePerfScale sopra: monitora il frame time e riduce gli effetti cosmetici se serve
 function loop(now){
   let dt = (now-lastT)/1000;
+  updatePerfScale((now-lastT));
   lastT = now;
   dt = Math.min(dt, 0.05);
   if (hitstopTimer>0){
@@ -3987,6 +4410,7 @@ function loop(now){
     updateFloatTexts(dt);
     updateShockwaves(dt);
     updateParticles(dt);
+    updateSpellFlashes(dt);
     updateRemoteSmoothing(dt);
     updateMonsterSmoothing(dt);
     if (isHost) hostSimTick(dt);
@@ -4038,11 +4462,20 @@ let loginSelectedClass = me.cls;
 
 function populateLoginClasses(){
   const wrap = document.getElementById('login-classes');
+  const accents = { guerriero:'#ff6b5e', ladro:'#7fc8ff', mago:'#c07ef0', ranger:'#8fd070' };
   wrap.innerHTML = CLASS_KEYS.map(k=>{
     const c = CLASSES[k];
-    return '<div class="login-class-card'+(k===loginSelectedClass?' selected':'')+'" data-cls="'+k+'">'
-      +'<span class="lc-icon">'+c.icon+'</span><b>'+c.name+'</b><span>'+c.desc+'</span>'
-      +'<span style="color:var(--amber);font-size:9px;margin-top:2px;">'+c.ability.icon+' '+c.ability.name+'</span>'
+    // ritratto dell'eroe: sprite PNG dedicato per classe, con fallback sulla vecchia emoji
+    const heroImg = '<img class="lc-img" src="assets/sprites/hero_'+k+'.png" alt=""'+IMG_FALLBACK_ATTR+'><span class="hud-icon-fallback lc-fb">'+c.icon+'</span>';
+    // l'abilità del Guerriero (⚡) usa lo sprite icon_lightning con il fallback emoji
+    const abIconHtml = (c.ability.icon==='⚡')
+      ? '<img class="hud-icon" src="assets/sprites/icon_lightning.png" alt=""'+IMG_FALLBACK_ATTR+'><span class="hud-icon-fallback">⚡</span>'
+      : '<span class="hud-icon-fallback ab-em">'+c.ability.icon+'</span>';
+    return '<div class="login-class-card'+(k===loginSelectedClass?' selected':'')+'" data-cls="'+k+'" style="--acc:'+(accents[k]||'#e8a13d')+'">'
+      +'<span class="lc-hero">'+heroImg+'</span>'
+      +'<b>'+c.name+'</b>'
+      +'<span>'+c.desc+'</span>'
+      +'<span class="lc-ability"><span class="ab-ic">'+abIconHtml+'</span>'+c.ability.name+'</span>'
       +'</div>';
   }).join('');
   wrap.querySelectorAll('.login-class-card').forEach(el=>{
