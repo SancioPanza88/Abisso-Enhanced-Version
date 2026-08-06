@@ -14,4 +14,3 @@ Roguelike multiplayer in tempo reale, senza server, in un unico file.
 
 - 🎬 Video originale: https://www.youtube.com/watch?v=Pxu4IHBrLTU
 - 🎮 Gioco originale: https://www.youdev.it/games/abisso.html
-- 🚀 Questa versione: https://github.com/SancioPanza88/Abisso-Enhanced-Version
