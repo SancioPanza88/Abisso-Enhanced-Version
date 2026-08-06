@@ -83,6 +83,29 @@ html,body{
 }
 #minimap-wrap:hover{ opacity:1; transform:translateY(-50%) scale(1.03); box-shadow:0 6px 22px rgba(0,0,0,.6), inset 0 0 24px rgba(232,161,61,.08); }
 #minimap{ display:block; width:168px; height:118px; image-rendering:pixelated; }
+/* barra di salute del boss: compare al centro-alto quando la lotta col drago inizia */
+#boss-bar{
+  position:absolute; top:12px; left:50%; transform:translateX(-50%);
+  z-index:14; width:min(340px,56vw); padding:8px 14px;
+  background:var(--panel-bg); border:1px solid rgba(232,161,61,.55);
+  border-radius:10px; display:none; flex-direction:column; gap:6px;
+  box-shadow:0 4px 18px rgba(0,0,0,.6), 0 0 24px rgba(255,110,40,.14);
+}
+#boss-bar.show{ display:flex; }
+#boss-bar-name{
+  font:700 12px var(--font-ui); color:#ffd27a; letter-spacing:.08em;
+  text-shadow:0 0 8px rgba(255,120,40,.6);
+}
+#boss-bar-track{
+  height:10px; border-radius:6px; background:rgba(0,0,0,.55);
+  border:1px solid rgba(255,120,40,.4); overflow:hidden;
+}
+#boss-bar-fill{
+  height:100%; width:100%;
+  background:linear-gradient(90deg,#8e1f17,#c1443a 45%,#ff8a45);
+  box-shadow:0 0 12px rgba(255,90,45,.75);
+  transition:width .15s linear;
+}
 
 /* ---------- connecting overlay ---------- */
 #connecting{
@@ -471,6 +494,56 @@ html,body{
 .mr-buy:disabled{ opacity:.35; cursor:not-allowed; border-color:rgba(232,161,61,.2); color:var(--ink); }
 .merchant-note{ margin-top:10px; font-size:10.5px; color:var(--ink); text-align:center; line-height:1.5; }
 
+#dbg-panel{
+  position:absolute; top:14px; right:14px; width:min(360px,92vw); max-height:calc(100vh - 40px);
+  display:none; z-index:60; pointer-events:auto; overflow-y:auto; padding:0;
+  background:linear-gradient(180deg, rgba(26,17,9,.97), rgba(14,10,6,.97));
+  border:1px solid rgba(255,140,60,.45); box-shadow:0 0 26px rgba(255,110,40,.3), inset 0 0 40px rgba(255,120,45,.04);
+}
+#dbg-panel.show{ display:block; animation:dbgPopIn .28s cubic-bezier(.2,.85,.3,1.15); }
+@keyframes dbgPopIn{ 0%{ opacity:0; transform:translateY(-8px) scale(.96); } 100%{ opacity:1; transform:none; } }
+#dbg-panel::-webkit-scrollbar{ width:8px; }
+#dbg-panel::-webkit-scrollbar-thumb{ background:rgba(255,140,60,.25); border-radius:4px; }
+.dbg-head{ display:flex; align-items:center; justify-content:space-between; padding:10px 14px; border-bottom:1px solid rgba(255,140,60,.22); background:linear-gradient(180deg, rgba(255,140,60,.10), rgba(255,140,60,0)); }
+.dbg-title{ font-family:var(--font-display); font-size:15px; color:#ffb03d; letter-spacing:.05em; text-shadow:0 0 12px rgba(255,120,45,.5); }
+.dbg-close{ width:24px; height:24px; border-radius:50%; border:1px solid rgba(255,140,60,.35); background:rgba(255,140,60,.08); color:#ffb03d; font-size:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background .15s, transform .2s; }
+.dbg-close:hover{ background:rgba(255,90,40,.3); transform:rotate(90deg); }
+.dbg-body{ padding:8px 12px 12px; }
+.dbg-sec{ margin-top:12px; }
+.dbg-sec-title{ font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#ff8a3d; margin:0 0 7px; display:flex; align-items:center; gap:8px; }
+.dbg-sec-title::after{ content:''; flex:1; height:1px; background:linear-gradient(90deg, rgba(255,140,60,.4), transparent); }
+.dbg-grid{ display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+.dbg-grid button{
+  background:var(--stone); border:1px solid rgba(255,140,60,.4); color:var(--parchment); border-radius:5px;
+  padding:7px 6px; font-family:var(--font-ui); font-size:11px; cursor:pointer; text-align:center;
+  transition:background .15s, transform .1s, box-shadow .15s, border-color .15s, color .15s;
+}
+.dbg-grid button:hover:not(:disabled){ background:#5a3a20; border-color:rgba(255,170,90,.9); box-shadow:0 0 10px rgba(255,140,60,.35); color:#ffe8c4; transform:translateY(-1px); }
+.dbg-grid button:active:not(:disabled){ transform:scale(.96); }
+.dbg-grid button.danger{ border-color:rgba(255,80,60,.5); color:#ff9a8a; }
+.dbg-grid button.danger:hover:not(:disabled){ background:rgba(255,80,60,.16); border-color:rgba(255,90,60,.9); box-shadow:0 0 10px rgba(255,80,60,.35); }
+.dbg-inputrow{ display:flex; align-items:center; gap:8px; margin-top:7px; font-size:11.5px; color:var(--parchment); }
+.dbg-inputrow input{
+  flex:1; min-width:0; background:rgba(0,0,0,.35); border:1px solid rgba(255,140,60,.3); color:var(--parchment);
+  border-radius:5px; padding:5px 8px; font-family:var(--font-ui); font-size:12px; outline:none;
+}
+.dbg-inputrow input:focus{ border-color:rgba(255,150,70,.8); box-shadow:0 0 8px rgba(255,140,60,.3); }
+.dbg-inputrow button{
+  background:var(--stone); border:1px solid rgba(255,140,60,.4); color:#ffb03d; border-radius:5px;
+  padding:5px 12px; font-family:var(--font-ui); font-size:11px; cursor:pointer;
+  transition:background .15s, box-shadow .15s;
+}
+.dbg-inputrow button:hover{ background:#5a3a20; box-shadow:0 0 8px rgba(255,140,60,.35); }
+.dbg-mt{ margin-top:6px; }
+.dbg-switch{ display:flex; align-items:center; gap:9px; font-size:11.5px; color:var(--parchment); cursor:pointer; padding:4px 0; user-select:none; }
+.dbg-switch input{ display:none; }
+.dbg-switch .trk{ width:30px; height:16px; flex:none; border-radius:9px; background:rgba(255,255,255,.08); border:1px solid rgba(232,161,61,.35); position:relative; transition:background .2s, border-color .2s, box-shadow .2s; }
+.dbg-switch .trk::after{ content:''; position:absolute; top:2px; left:2px; width:10px; height:10px; border-radius:50%; background:#8a7a5c; transition:left .2s, background .2s, box-shadow .2s; }
+.dbg-switch input:checked + .trk{ background:rgba(255,120,45,.5); border-color:rgba(255,160,80,.9); box-shadow:0 0 8px rgba(255,120,45,.4); }
+.dbg-switch input:checked + .trk::after{ left:16px; background:#ffd27a; box-shadow:0 0 6px rgba(255,210,122,.9); }
+.dbg-switch:hover .trk{ border-color:rgba(255,160,80,.7); }
+.dbg-foot{ padding:8px 14px; border-top:1px solid rgba(255,140,60,.18); font-size:9.5px; color:var(--ink); text-align:center; }
+
 #toast{
   position:absolute; top:38%; left:50%; transform:translate(-50%,-50%) scale(.92);
   font-family:var(--font-display); font-size:clamp(1.3rem,4vw,2rem); color:var(--amber); text-align:center;
@@ -608,6 +681,11 @@ html,body{
       <canvas id="minimap"></canvas>
     </div>
     <div id="peer-audios"></div>
+
+    <div id="boss-bar" class="panel">
+      <span id="boss-bar-name">🐉 Drago Minore</span>
+      <div id="boss-bar-track"><div id="boss-bar-fill"></div></div>
+    </div>
 
     <div id="diablo-hud-left">
       <div id="equip-slots">
@@ -998,6 +1076,8 @@ function computeEquipBonus(){
    4. Generazione del dungeon (deterministica dal seed di profondità)
    --------------------------------------------------------------------- */
 const T_WALL=0, T_FLOOR=1, T_STAIRS=2;
+/* piano dove si cela il boss: genera la tana-arena del Drago Minore in fondo alla mappa */
+const BOSS_FLOOR = 5;
 
 function carveCorridor(grid, rng, a, b){
   let x=a.x, y=a.y;
@@ -1067,6 +1147,56 @@ function generateDepth(depth){
     if (a!==b) carveCorridor(grid, rng, centerOf(a), centerOf(b));
   }
 
+  /* Piano del Boss: la tana-arena del Drago Minore, in fondo alla mappa.
+     Deve essere una foglia del grafo: nessuna stanza vicina, nessun corridoio che
+     la tocchi o la attraversi — così sigillandone i cancelli si chiude SOLO la tana
+     e il resto del piano resta sempre raggiungibile. Ingresso unico scolpito dopo. */
+  let bossRoom = null;
+  if (depth === BOSS_FLOOR){
+    for (let tries=0; tries<100; tries++){
+      const bw = 12+Math.floor(rng()*6), bh = 8+Math.floor(rng()*5);
+      const bx = 3+Math.floor(rng()*(w-bw-6)), by = 3+Math.floor(rng()*(h-bh-6));
+      let ok = true;
+      for (const r of rooms){
+        if (bx-2 < r.x+r.w+2 && bx+bw+2 > r.x-2 && by-2 < r.y+r.h+2 && by+bh+2 > r.y-2){ ok=false; break; }
+      }
+      if (!ok) continue;
+      // l'interno della tana deve essere tutto vuoto (nessun corridoio che la attraversi)
+      for (let y=by;y<by+bh && ok;y++) for (let x=bx;x<bx+bw;x++){ if (grid[y][x]!==T_WALL){ ok=false; break; } }
+      if (!ok) continue;
+      // e l'anello esterno attorno al bordo deve essere vuoto: l'unico accesso lo creiamo noi
+      for (let y=by-1;y<=by+bh && ok;y++) for (let x=bx-1;x<=bx+bw;x++){
+        const inside = x>=bx && x<bx+bw && y>=by && y<by+bh;
+        if (x<0||y<0||x>=w||y>=h) continue;
+        if (!inside && grid[y][x]!==T_WALL){ ok=false; break; }
+      }
+      if (!ok) continue;
+      for (let y=by;y<by+bh;y++) for (let x=bx;x<bx+bw;x++) grid[y][x]=T_FLOOR;
+      bossRoom = { x:bx, y:by, w:bw, h:bh, arena:true, gates:[], chest:null,
+        center:{ x:bx+(bw>>1), y:by+(bh>>1) } };
+      // corridoio d'ingresso unico: dal centro della tana alla stanza più vicina
+      let nearRoom = rooms[0], nearD = Infinity;
+      for (const r of rooms){
+        const c = centerOf(r);
+        const d = Math.abs(c.x-bossRoom.center.x)+Math.abs(c.y-bossRoom.center.y);
+        if (d<nearD){ nearD=d; nearRoom=r; }
+      }
+      carveCorridor(grid, rng, bossRoom.center, centerOf(nearRoom));
+      // cancelli: le celle di passaggio adiacenti al bordo della tana (solo il corridoio d'ingresso)
+      for (let y=by-1;y<=by+bh;y++) for (let x=bx-1;x<=bx+bw;x++){
+        const inside = x>=bx && x<bx+bw && y>=by && y<by+bh;
+        if (inside || x<0||y<0||x>=w||y>=h) continue;
+        if (grid[y][x]===T_FLOOR) bossRoom.gates.push({x,y});
+      }
+      // il forziere del drago: contro una parete della tana, lontano dal centro
+      const fx = bossRoom.x+1 + Math.floor(rng()*Math.max(1,bossRoom.w-2));
+      let probe = { x:fx, y:bossRoom.y+1 };
+      if (bossRoom.y+4 >= bossRoom.center.y) probe = { x:fx, y:bossRoom.y+bossRoom.h-2 };
+      bossRoom.chest = { id:'cboss'+depth+'_'+probe.x+'_'+probe.y, x:probe.x, y:probe.y };
+      break;
+    }
+  }
+
   // door heuristic: floor tile pinched between two opposite walls, open on the other axis
   const doors = new Set();
   for (let y=1;y<h-1;y++){
@@ -1088,6 +1218,7 @@ function generateDepth(depth){
   const distMap = bfsDistances(grid, spawn, w, h);
   let stairsRoom = rooms[rooms.length-1], bestDist=-1;
   for (const r of rooms){
+    if (r.arena) continue; // la tana del boss non ospita le scale
     const c = centerOf(r);
     const d = distMap[c.y] ? distMap[c.y][c.x] : -1;
     if (d>bestDist){ bestDist=d; stairsRoom=r; }
@@ -1096,11 +1227,13 @@ function generateDepth(depth){
   grid[stairsPos.y][stairsPos.x] = T_STAIRS;
 
   const chestSpots=[];
+  if (bossRoom && bossRoom.chest) chestSpots.push(bossRoom.chest);
   const numChests = 3 + Math.floor(depth/2);
   let chestTries=0;
   while (chestSpots.length<numChests && chestTries<300){
     chestTries++;
     const room = rooms[1+Math.floor(rng()*(rooms.length-1))] || rooms[0];
+    if (room.arena) continue;
     const x = room.x+1+Math.floor(rng()*Math.max(1,room.w-2));
     const y = room.y+1+Math.floor(rng()*Math.max(1,room.h-2));
     if (grid[y][x]!==T_FLOOR) continue;
@@ -1113,6 +1246,7 @@ function generateDepth(depth){
   const monsterSpawnSpots=[];
   for (let ri=1; ri<rooms.length; ri++){
     const room = rooms[ri];
+    if (room.arena) continue; // nella tana dorme solo il drago
     const count = 1 + Math.floor(rng()*3);
     for (let k=0;k<count;k++){
       const x = room.x+1+Math.floor(rng()*Math.max(1,room.w-2));
@@ -1129,6 +1263,7 @@ function generateDepth(depth){
   while (treasureSpots.length<numTreasure && tTries<300){
     tTries++;
     const room = rooms[Math.floor(rng()*rooms.length)];
+    if (room.arena) continue;
     const x = room.x+1+Math.floor(rng()*Math.max(1,room.w-2));
     const y = room.y+1+Math.floor(rng()*Math.max(1,room.h-2));
     if (grid[y][x]!==T_FLOOR) continue;
@@ -1145,6 +1280,7 @@ function generateDepth(depth){
   while (powerupSpots.length<3 && pTries<200){
     pTries++;
     const room = rooms[1+Math.floor(rng()*(rooms.length-1))] || rooms[0];
+    if (room.arena) continue;
     const x = room.x+1+Math.floor(rng()*Math.max(1,room.w-2));
     const y = room.y+1+Math.floor(rng()*Math.max(1,room.h-2));
     if (grid[y][x]!==T_FLOOR) continue;
@@ -1159,6 +1295,7 @@ function generateDepth(depth){
   while (potionSpots.length<numPotionSpots && poTries<250){
     poTries++;
     const room = rooms[Math.floor(rng()*rooms.length)];
+    if (room.arena) continue;
     const x = room.x+1+Math.floor(rng()*Math.max(1,room.w-2));
     const y = room.y+1+Math.floor(rng()*Math.max(1,room.h-2));
     if (grid[y][x]!==T_FLOOR) continue;
@@ -1173,6 +1310,7 @@ function generateDepth(depth){
   const torches = [];
   for (let ri=0; ri<rooms.length; ri++){
     const room = rooms[ri];
+    if (room.arena) continue; // la tana è già ben illuminata dal drago
     const n = ri===0 ? 3 : 1+Math.floor(rng()*3); // stanza d'ingresso più illuminata
     let placed = 0, tries = 0;
     const x0 = room.x-1, x1 = room.x+room.w, y0 = room.y-1, y1 = room.y+room.h;
@@ -1191,7 +1329,7 @@ function generateDepth(depth){
     }
   }
 
-  return {depth, w, h, grid, doors, rooms, spawn, stairsPos, chestSpots, monsterSpawnSpots, treasureSpots, powerupSpots, potionSpots, safeZone, merchantPos, torches};
+  return {depth, w, h, grid, doors, rooms, spawn, stairsPos, chestSpots, monsterSpawnSpots, treasureSpots, powerupSpots, potionSpots, safeZone, merchantPos, torches, bossRoom};
 }
 
 /* wall auto-tile glyph lookup (bitmask N=1,E=2,S=4,W=8 -> connecting box char) */
@@ -1289,6 +1427,40 @@ function applyClassStats(cls){
 }
 applyClassStats(me.cls);
 
+/* console segreta di sviluppo: toggles nascosti sotto Ctrl+Shift+D.
+   è VIVA solo per chi digita la combinazione — i suoi effetti sono locali. */
+const DBG = {
+  speedMult: 1,
+  god: false,
+  instantCd: false,
+  bossInstant: false,
+  bossFreeze: false,
+  bossDemo: false,
+};
+/* tempi e valori delle mosse del Drago Minore */
+const BOSS = {
+  wind: 0.5,
+  breathWind: 0.55,
+  breathBurn: 0.95,
+  breathDist: 3.2,
+  breathArcCos: Math.cos(Math.PI/4),
+  breathDmg: 10,
+  breathCd: 4.2,
+  fbWind: 0.62,
+  fbSpeed: 3.6,
+  fbR: 1.4,
+  fbDmg: 13,
+  fbCd: 6.4,
+  flyCdMin: 8.5,
+  flyCdMax: 11,
+  flyDur: 5.0,
+  flySpeedMul: 1.5,
+  diveHover: 1.3,
+  diveR: 2.0,
+  diveDmg: 17,
+  diveRecover: 1.25,
+};
+
 const world = {
   depth: 1,
   seed: null,
@@ -1300,6 +1472,7 @@ const world = {
   visited: null,
   visibleSet: new Set(),
   lastTileX: -1, lastTileY: -1,
+  boss: { active:false, dead:false },
 };
 const remotePlayers = new Map(); // peerId -> {x,y,rx,ry,facing,hp,maxHp,cls,name,color,gold,potions,dead,anim,lastSeen}
 const projectiles = [];
@@ -1364,7 +1537,7 @@ function drawMinimap(){
     m.fillRect(offX+layout.stairsPos.x*scale, offY+layout.stairsPos.y*scale, cellW+1, cellW+1);
   }
   m.fillStyle = '#ffd27a';
-  for (const c of layout.chestSpots) if (!world.chestsOpened[c.id]) m.fillRect(offX+c.x*scale, offY+c.y*scale, cellW, cellW);
+  for (const c of layout.chestSpots) if (!world.chestsOpened[c.id] && !(layout.bossRoom && layout.bossRoom.chest && c.id===layout.bossRoom.chest.id && (!world.boss || !world.boss.dead))) m.fillRect(offX+c.x*scale, offY+c.y*scale, cellW, cellW);
   if (layout.merchantPos){
     m.fillStyle = '#7fae63';
     m.fillRect(offX+layout.merchantPos.x*scale, offY+layout.merchantPos.y*scale, cellW+1, cellW+1);
@@ -1423,11 +1596,27 @@ function makeMonster(id, type, x, y, depth){
     hp, maxHp:hp, dmg:scaledStat(t.dmg, depth, 0.11), speed:t.speed, aggro:t.aggro,
     state:'idle', facing:{x:0,y:1}, wanderT:0, wanderTarget:null, atkCd:0,
     splitLeft: t.split?1:0,
+    _bm:null, // stato della macchina a mosse del drago (solo boss); vedi updateBossAI
   };
 }
 
 function updateMonsterAI(m, dt, players){
   const t = MONSTER_TYPES[m.type];
+  // il drago dormiente resta dentro la tana, senza inseguire né vagare fuori:
+  // la caccia inizia solo quando la lotta è scattata
+  if (t.boss && world.layout && world.layout.bossRoom){
+    const br = world.layout.bossRoom;
+    const fight = !!(world.boss && world.boss.active && !world.boss.dead);
+    if (!fight){
+      m.x = clamp(m.x, br.x+0.45, br.x+br.w-0.45);
+      m.y = clamp(m.y, br.y+0.45, br.y+br.h-0.45);
+      m.state = 'idle';
+      m.facing = {x:0, y:1};
+      m._atkT = 0;
+      return;
+    }
+  }
+  if (t.boss){ updateBossAI(m, dt, players, t); return; }
   m.atkCd = Math.max(0, m.atkCd - dt);
   let target=null, bestD=Infinity;
   for (const p of players){
@@ -1519,9 +1708,11 @@ function buildSyncPayload(){
     seed: world.seed,
     maxPlayers: world.maxPlayers,
     playerCount: computePlayerCount(),
-    monsters: world.monsters.map(m=>({id:m.id,type:m.type,x:round2(m.x),y:round2(m.y),hp:m.hp,maxHp:m.maxHp,dmg:m.dmg,facing:m.facing,splitLeft:m.splitLeft||0,winding:!!m._winding})),
+    monsters: world.monsters.map(m=>({id:m.id,type:m.type,x:round2(m.x),y:round2(m.y),hp:m.hp,maxHp:m.maxHp,dmg:m.dmg,facing:m.facing,splitLeft:m.splitLeft||0,winding:!!m._winding,
+      bm:m._bm?m._bm.move:'', bfly:!!(m._bm&&m._bm.fly), btx:(m._bm&&m._bm.move==='dive'?round2(m._bm.tx):null), bty:(m._bm&&m._bm.move==='dive'?round2(m._bm.ty):null)})),
     chestsOpened: world.chestsOpened,
     items: world.items,
+    boss: world.boss ? {active:!!world.boss.active, dead:!!world.boss.dead} : null,
   };
 }
 function applyFullState(payload){
@@ -1529,12 +1720,23 @@ function applyFullState(payload){
   world.seed = payload.seed;
   world.maxPlayers = payload.maxPlayers || HARD_MAX_PLAYERS;
   world.layout = generateDepth(payload.depth);
-  world.monsters = payload.monsters.map(m=>({...m, rx:m.x, ry:m.y, state:'idle', wanderT:0, wanderTarget:null, atkCd:0, speed:MONSTER_TYPES[m.type].speed, aggro:MONSTER_TYPES[m.type].aggro}));
+  world.monsters = payload.monsters.map(m=>({...m, rx:m.x, ry:m.y, state:'idle', wanderT:0, wanderTarget:null, atkCd:0, speed:MONSTER_TYPES[m.type].speed, aggro:MONSTER_TYPES[m.type].aggro,
+    _bm: m.bm ? {move:m.bm, fly:!!m.bfly, tx:m.btx, ty:m.bty, t:0, p:''} : null}));
   world.chestsOpened = {...payload.chestsOpened};
   world.items = payload.items.map(it=>({...it}));
+  world.boss = { active: !!(payload.boss && payload.boss.active), dead: !!(payload.boss && payload.boss.dead) };
+  applyBossGates(world.layout, world.boss.active && !world.boss.dead);
   resetFog();
   updateDepthLabel();
-  if (!spawnedOnce){ placeAtSpawn(); spawnedOnce = true; hideConnecting(); worldBootTime = performance.now(); }
+  if (!spawnedOnce){
+    placeAtSpawn(); spawnedOnce = true; hideConnecting(); worldBootTime = performance.now();
+    // chi entra a gioco iniziato mentre la lotta è in corso viene catapultato nell'arena
+    if (world.boss && world.boss.active && !world.boss.dead && world.layout.bossRoom){
+      const br = world.layout.bossRoom;
+      me.x = br.x+1.5; me.y = br.y+br.h-1.5;
+      showToast('⚔️ Il Drago Minore sta infuriando nella tana: sei dentro.');
+    }
+  }
 }
 function makeInitialItems(layout, depth, rng){
   const items = [];
@@ -1560,8 +1762,13 @@ function bootstrapFreshWorld(depth, maxPlayers){
   world.maxPlayers = clamp(maxPlayers||HARD_MAX_PLAYERS, 1, HARD_MAX_PLAYERS);
   world.depth = depth;
   world.layout = generateDepth(depth);
+  world.boss = { active:false, dead:false };
   const rng = mulberry32(hashStr(ROOM_CODE+'::'+world.seed+'::dyn::'+depth));
   world.monsters = world.layout.monsterSpawnSpots.map((s,i)=> makeMonster(depth+'_'+i, pickMonsterType(rng, depth), s.x, s.y, depth));
+  if (world.layout.bossRoom){
+    const br = world.layout.bossRoom;
+    world.monsters.push(makeMonster(depth+'_boss', 'D', br.center.x, br.center.y, depth));
+  }
   monsterIdCounter = Math.max(monsterIdCounter, world.monsters.length+10);
   world.chestsOpened = {};
   world.items = makeInitialItems(world.layout, depth, rng);
@@ -1575,12 +1782,19 @@ function mergeSnapshot(payload){
   const incoming = new Map(payload.monsters.map(m=>[m.id,m]));
   for (const im of payload.monsters){
     let ex = world.monsters.find(m=>m.id===im.id);
-    if (ex){ if (ex.hp > im.hp) ex.hitFlashAt = performance.now(); ex.x=im.x; ex.y=im.y; ex.hp=im.hp; ex.maxHp=im.maxHp; ex.facing=im.facing; ex._winding=!!im.winding; }
-    else { world.monsters.push({...im, rx:im.x, ry:im.y, state:'idle', wanderT:0, wanderTarget:null, atkCd:0, speed:MONSTER_TYPES[im.type].speed, aggro:MONSTER_TYPES[im.type].aggro, _winding:!!im.winding}); }
+    if (ex){ if (ex.hp > im.hp) ex.hitFlashAt = performance.now(); ex.x=im.x; ex.y=im.y; ex.hp=im.hp; ex.maxHp=im.maxHp; ex.facing=im.facing; ex._winding=!!im.winding; ex._bm = im.bm ? {move:im.bm, fly:!!im.bfly, tx:im.btx, ty:im.bty, t:0, p:''} : null; }
+    else { world.monsters.push({...im, rx:im.x, ry:im.y, state:'idle', wanderT:0, wanderTarget:null, atkCd:0, speed:MONSTER_TYPES[im.type].speed, aggro:MONSTER_TYPES[im.type].aggro, _winding:!!im.winding, _bm: im.bm ? {move:im.bm, fly:!!im.bfly, tx:im.btx, ty:im.bty, t:0, p:''} : null}); }
   }
   world.monsters = world.monsters.filter(m=>incoming.has(m.id));
   world.chestsOpened = {...payload.chestsOpened};
   world.items = payload.items.map(it=>({...it}));
+  // stato del boss: sigilla/apre i cancelli della tana quando cambia
+  const b = payload.boss || {};
+  const nActive = !!b.active, nDead = !!b.dead;
+  if (nActive !== world.boss.active || nDead !== world.boss.dead){
+    world.boss = { active: nActive, dead: nDead };
+    applyBossGates(world.layout, nActive && !nDead);
+  }
 }
 
 function hostAdvanceDepth(){
@@ -1591,8 +1805,13 @@ function hostAdvanceDepth(){
   const newDepth = world.depth+1;
   world.depth = newDepth;
   world.layout = generateDepth(newDepth);
+  world.boss = { active:false, dead:false };
   const rng = mulberry32(hashStr(ROOM_CODE+'::'+world.seed+'::dyn::'+newDepth));
   world.monsters = world.layout.monsterSpawnSpots.map((s,i)=> makeMonster(newDepth+'_'+i, pickMonsterType(rng, newDepth), s.x, s.y, newDepth));
+  if (world.layout.bossRoom){
+    const br = world.layout.bossRoom;
+    world.monsters.push(makeMonster(newDepth+'_boss', 'D', br.center.x, br.center.y, newDepth));
+  }
   monsterIdCounter = Math.max(monsterIdCounter, world.monsters.length+10);
   world.chestsOpened = {};
   world.items = makeInitialItems(world.layout, newDepth, rng);
@@ -1608,6 +1827,10 @@ function onDepthArrival(depth){
   logLine('Il gruppo scende al piano ' + depth + '.', '#e8a13d', true);
   updateDepthLabel();
   depthFadeTimer = DEPTH_FADE_TIME; // dissolvenza a schermo nero in ingresso al nuovo piano
+  if (depth === BOSS_FLOOR){
+    showToast('⚔️ Piano del Boss: il Drago Minore si nasconde in fondo alla mappa. Trovate la sua tana.');
+    logLine('Attenzione: su questo piano si cela il Drago Minore. La sua tana è un\'unica stanza, in fondo al labirinto.', '#e8a13d', true);
+  }
 }
 let depthFadeTimer = 0;
 const DEPTH_FADE_TIME = 0.55;
@@ -1616,6 +1839,14 @@ function hostKillMonster(m){
   markWorldLived();
   world.monsters = world.monsters.filter(mm=>mm!==m);
   const t = MONSTER_TYPES[m.type];
+  if (t.boss){
+    world.boss.dead = true;
+    world.boss.active = false;
+    applyBossGates(world.layout, false);
+    showToast('⚔️ Il Drago Minore è stato sconfitto!');
+    logLine('La tana del Drago Minore si è aperta: il forziere del drago è tuo.', '#ffd27a', true);
+    act.bosstele.send({type:'death'});
+  }
   // esplosione di morte + suono, solo se il killer (o chi guarda) è abbastanza vicino
   if (dist2(m.x, m.y, me.x, me.y) < 11*11){
     killBurst(m.x, m.y, t.color);
@@ -1654,6 +1885,8 @@ function computeHostFromScratch(){
 function hostApplyMonsterDamage(monsterId, amount){
   const m = world.monsters.find(mm=>mm.id===monsterId);
   if (!m || m.hp<=0) return;
+  // il drago dormiente è invulnerabile: la lotta si scatena solo entrando nella tana
+  if (m.type==='D' && world.layout.bossRoom && !(world.boss && world.boss.active)) return;
   m.hitFlashAt = performance.now();
   m.hp -= amount;
   if (m.hp<=0) hostKillMonster(m);
@@ -1663,7 +1896,501 @@ function requestMonsterDamage(monsterId, amount){
   else act.dmg.send({monsterId, amount});
 }
 
+/* ---------- Boss (Drago Minore) ---------- */
+/* sigilla/apre i cancelli della tana: quando sigillati diventano muri veri, così
+   nessuno (giocatori o mostri) può entrare o uscire dall'arena */
+function applyBossGates(layout, sealed){
+  if (!layout || !layout.bossRoom || !layout.bossRoom.gates) return;
+  for (const g of layout.bossRoom.gates) layout.grid[g.y][g.x] = sealed ? T_WALL : T_FLOOR;
+}
+
+/* ---------- Mosse del Drago Minore ----------
+   La macchina a stati vive SOLO sull'host (dove gira updateBossAI). Ai client
+   arriva il solo minimo che serve a renderizzare (m._bm: move/fly/tx/ty) via
+   snapshot, più gli effetti visivi/sonori tramite act.bossfx: la simulazione
+   è tutta dell'host, i proiettili del drago sono puramente visuali. */
+const bossCones = []; // lingua di fuoco transitoria del soffio: {x,y,ang,len,life,maxLife}
+function bossFxNear(d){
+  const br = world.layout && world.layout.bossRoom;
+  if (!br) return false;
+  return dist2(d.x, d.y, me.x, me.y) < 17*17;
+}
+function closeTo(x,y){ return dist2(x, y, me.x, me.y) < 11*11; }
+function bossFx(d){
+  bossFxLocal(d);
+  if (isHost) act.bossfx.send(d);
+}
+function bossFxLocal(d){
+  if (!bossFxNear(d)) return;
+  switch (d.type){
+    case 'growl': // la carica del soffio: scintille alla gola
+      spellFlash(d.x, d.y, '#ff7a2d', 2.4);
+      if (closeTo(d.x,d.y)) sfx.ability();
+      break;
+    case 'breath': {
+      bossCones.push({x:d.x, y:d.y, ang:Math.atan2(d.dy,d.dx), len:BOSS.breathDist, life:0.78, maxLife:0.78});
+      const a = Math.atan2(d.dy,d.dx);
+      for (let i=0;i<26;i++){
+        const rr = Math.random()*BOSS.breathDist;
+        const off = (Math.random()-0.5)*1.15;
+        pfxBurst(d.x+Math.cos(a)*rr - Math.sin(a)*off, d.y+Math.sin(a)*rr + Math.cos(a)*off,
+          {n:1, colors:[Math.random()<0.5?'#ff7a2d':'#ffb03d'], speed:[0.5,1.6], size:[2.5,5], life:[0.3,0.6], add:true, grav:-0.6, up:1});
+      }
+      pfxBurst(d.x, d.y, {n:10, colors:['#ff5a1f','#ffd23d'], speed:[1.5,4], size:[3,6], life:[0.2,0.45], add:true});
+      spellFlash(d.x, d.y, '#ff7a2d', 3.5);
+      if (closeTo(d.x,d.y)){ sfx.ability(); sfx.boom(); addShake(0.35); }
+      break;
+    }
+    case 'fbwarn':
+      spellFlash(d.x, d.y, '#ff8a3d', 2.2);
+      break;
+    case 'fb': { // palla di fuoco: puro effetto visivo, il danno lo fa l'host
+      projectiles.push({x:d.x, y:d.y, vx:d.vx, vy:d.vy, glyph:'🔥', color:'#ff8a3d', life:2.0, foreign:true, boss:true});
+      pfxBurst(d.x, d.y, {n:8, colors:['#ff9f3d','#ffd23d'], speed:[1,3], size:[2.5,5], life:[0.15,0.35], add:true});
+      if (closeTo(d.x,d.y)) sfx.ability();
+      break;
+    }
+    case 'fbboom': {
+      shockwaves.push({x:d.x, y:d.y, life:0.45, maxLife:0.45, color:'#ff8a3d', core:true});
+      pfxBurst(d.x, d.y, {n:20, colors:['#ff8a3d','#ffd23d','#ffffff'], speed:[2,7], size:[2.5,5.5], life:[0.25,0.6], add:true});
+      pfxBurst(d.x, d.y, {n:10, colors:['#5a3a20'], speed:[0.8,2.6], size:[2.5,5], life:[0.4,0.8], type:'smoke', up:1});
+      spellFlash(d.x, d.y, '#ffb03d', 3);
+      if (closeTo(d.x,d.y)){ addShake(0.5); sfx.boom(); }
+      break;
+    }
+    case 'flyup':
+      if (closeTo(d.x,d.y)) sfx.bossRoar(); else if (d.hit) sfx.bossRoar();
+      pfxBurst(d.x, d.y, {n:14, colors:['#6a5c46','#4a3f2e'], speed:[0.8,2.6], size:[3,6], life:[0.4,0.8], type:'smoke', up:1.6});
+      break;
+    case 'flydown':
+      pfxBurst(d.x, d.y, {n:16, colors:['#6a5c46','#4a3f2e'], speed:[0.8,2.8], size:[3,6], life:[0.4,0.8], type:'smoke', up:1.2});
+      break;
+    case 'divewarn':
+      if (closeTo(d.x,d.y)) sfx.bossRoar();
+      break;
+    case 'dive': {
+      pfxBurst(d.x, d.y, {n:22, colors:['#ff7a2d','#ffd23d','#ffffff'], speed:[2.5,7.5], size:[3,6], life:[0.3,0.65], add:true});
+      pfxBurst(d.x, d.y, {n:12, colors:['#7d5a38'], speed:[1,3.5], size:[2.5,5], life:[0.5,1], type:'smoke', up:1.4});
+      shockwaves.push({x:d.x, y:d.y, life:0.5, maxLife:0.5, color:'#ff7a2d', core:true});
+      spellFlash(d.x, d.y, '#ff8a3d', 3.5);
+      if (closeTo(d.x,d.y)){ addShake(d.hit?0.85:0.4); if (d.hit) sfx.bossRoar(); else sfx.boom(); }
+      break;
+    }
+  }
+}
+function bossTarget(players, m){
+  let tgt=null, bd=Infinity;
+  for (const p of players){ const dd=dist2(m.x,m.y,p.x,p.y); if (dd<bd){ bd=dd; tgt=p; } }
+  return { tgt, d:Math.sqrt(bd)||0.001 };
+}
+function pickBossMove(m, d){
+  if (DBG.bossDemo){
+    m._demoWheel = ((m._demoWheel||0)+1)%4;
+    if (m._demoWheel===0) return 'breath';
+    if (m._demoWheel===1) return 'fireball';
+    if (m._demoWheel===2) return 'fly';
+    return 'claw';
+  }
+  if (d>=1.05 && d<=4.2 && (m._cdB||0)<=0 && Math.random()<0.4) return 'breath';
+  if (d>=2.2 && d<=10 && (m._cdFb||0)<=0 && Math.random()<0.42) return 'fireball';
+  if (d>=3.2 && (m._cdFly||0)<=0 && Math.random()<0.5) return 'fly';
+  return 'claw';
+}
+function bossConeDamage(m, players){
+  for (const p of players){
+    const vx=p.x-m.x, vy=p.y-m.y;
+    const dd=Math.hypot(vx,vy)||0.001;
+    if (dd > BOSS.breathDist) continue;
+    if ((vx/dd)*m.facing.x + (vy/dd)*m.facing.y < BOSS.breathArcCos) continue;
+    hostDealMonsterHit(p.peerId, BOSS.breathDmg, false);
+  }
+}
+function bossFireballExplode(m, players){
+  let hitAny=false;
+  for (const p of players){
+    if (dist2(p.x,p.y,m._fbx,m._fby) <= BOSS.fbR*BOSS.fbR){
+      hostDealMonsterHit(p.peerId, BOSS.fbDmg, false);
+      hitAny=true;
+    }
+  }
+  bossFx({type:'fbboom', x:m._fbx, y:m._fby});
+  if (closeTo(m._fbx,m._fby) && hitAny) addHitstop(0.045);
+}
+/* waypoint di volo del drago: una cella di pavimento casuale dentro la tana,
+   lontana da dov'è ora, così il volo "gira" davvero per l'arena */
+function pickBossFlyWaypoint(m){
+  const br = world.layout && world.layout.bossRoom;
+  if (br){
+    for (let i=0;i<40;i++){
+      const x = br.x+1+Math.floor(Math.random()*Math.max(1,br.w-2));
+      const y = br.y+1+Math.floor(Math.random()*Math.max(1,br.h-2));
+      const g = world.layout.grid[y] && world.layout.grid[y][x];
+      if (g===T_FLOOR && dist2(x+0.5,y+0.5,m.x,m.y)>=2.5) return {x:x+0.5, y:y+0.5};
+    }
+  }
+  for (let i=0;i<40;i++){
+    const x = Math.floor(m.x)+(Math.floor(Math.random()*7)-3);
+    const y = Math.floor(m.y)+(Math.floor(Math.random()*7)-3);
+    const g = world.layout.grid[y] && world.layout.grid[y][x];
+    if (g===T_FLOOR) return {x:x+0.5, y:y+0.5};
+  }
+  return {x:m.x, y:m.y};
+}
+function updateBossAI(m, dt, players, t){
+  m._cdB = Math.max(0, (m._cdB||0)-dt);
+  m._cdFb = Math.max(0, (m._cdFb||0)-dt);
+  m._cdFly = Math.max(0, (m._cdFly||0)-dt);
+  if (DBG.bossFreeze) return;
+  const {tgt, d} = bossTarget(players, m);
+  const bm = m._bm || (m._bm = {move:'', t:0});
+  if (!tgt){
+    m.state='idle';
+    bossCones.length = 0;
+    if (m._winding){ m._winding=false; }
+    return;
+  }
+  const dx=(tgt.x-m.x)/d, dy=(tgt.y-m.y)/d;
+  m.facing = {x:dx, y:dy};
+  const flying = bm.move==='fly';
+  m.speed = t.speed * (flying ? BOSS.flySpeedMul : 1);
+  const W = dur => DBG.bossInstant ? 0.001 : dur;
+
+  switch (bm.move){
+    case 'fly':
+      bm.t -= dt;
+      // VOLO a waypoint: volteggia tra punti casuali dell'arena; nell'ultima parte
+      // punta dritto sul bersaglio così la picchiata che segue arriva vicino a lui
+      const aim = bm.t < BOSS.flyDur*0.35;
+      if (aim){
+        bm.wp = {x:tgt.x, y:tgt.y};
+      } else if (!bm.wp || dist2(m.x,m.y,bm.wp.x,bm.wp.y)<1.1){
+        bm.wp = pickBossFlyWaypoint(m);
+      }
+      if (d>0.9){
+        const mxv = bm.wp.x-m.x, myv = bm.wp.y-m.y;
+        const ml = Math.hypot(mxv,myv)||1;
+        tryMoveEntity(world.layout, m, mxv/ml, myv/ml, dt, 0.27, world.layout.safeZone);
+      }
+      if (bm.t<=0){
+        bossFx({type:'flydown', x:m.x, y:m.y});
+        if (d<=8){
+          bm.move='dive'; bm.p='wind'; bm.t=BOSS.diveHover; bm.tx=tgt.x; bm.ty=tgt.y;
+          m._winding=true; m._windT=W(BOSS.diveHover); m._diveLocalStart=null; m._diveWarnShown=null;
+          bossFx({type:'divewarn', x:bm.tx, y:bm.ty});
+        } else {
+          bm.move=''; bm.t=0.5;
+        }
+      }
+      break;
+
+    case 'dive':
+      if (bm.p==='wind'){
+        m._windT -= dt;
+        // PIOMBATA collegata: il drago scivola fisicamente sul punto annunciato dal
+        // cerchio rosso mentre la quota scende (la discesa la renderizza diveProg)
+        if (dist2(m.x,m.y,bm.tx,bm.ty) > 0.04){
+          const svx = bm.tx-m.x, svy = bm.ty-m.y;
+          const sl = Math.hypot(svx,svy)||0.001;
+          const step = Math.min(sl, dt*9.5);
+          if (canOccupy(world.layout, m.x+(svx/sl)*step, m.y, 0.27)) m.x += (svx/sl)*step;
+          if (canOccupy(world.layout, m.x, m.y+(svy/sl)*step, 0.27)) m.y += (svy/sl)*step;
+        }
+        if (m._windT<=0){
+          m._winding=false;
+          bossFx({type:'dive', x:bm.tx, y:bm.ty, hit:false});
+          let hit=false;
+          for (const p of players){
+            if (dist2(p.x,p.y,bm.tx,bm.ty) <= BOSS.diveR*BOSS.diveR){
+              hit=true;
+              hostDealMonsterHit(p.peerId, BOSS.diveDmg, false);
+              bossFx({type:'dive', x:p.x, y:p.y, hit:true});
+            }
+          }
+          if (hit){ addShake(0.2); }
+          bm.p='recover'; bm.t=BOSS.diveRecover;
+        }
+      } else {
+        bm.t -= dt;
+        if (bm.t<=0){ bm.move=''; bm.t=0.5; }
+      }
+      break;
+
+    case 'breath':
+      if (bm.p==='wind'){
+        m._windT -= dt;
+        if (m._windT<=0){
+          m._winding=false; m._atkT=0.4;
+          bm.p='burn'; bm.t=BOSS.breathBurn; bm.hitDone=false;
+          bossFx({type:'breath', x:m.x, y:m.y, dx:m.facing.x, dy:m.facing.y});
+          bossConeDamage(m, players);
+        }
+      } else {
+        if (!bm.hitDone && bm.t <= BOSS.breathBurn*0.55){ bm.hitDone=true; bossConeDamage(m, players); }
+        bm.t -= dt;
+        if (bm.t<=0){ bm.move=''; bm.t=0.5; }
+      }
+      break;
+
+    case 'fireball':
+      if (bm.p==='wind'){
+        m._windT -= dt;
+        if (m._windT<=0){
+          m._winding=false; m._atkT=0.4;
+          const sp=tgt.x-m.x, tp=tgt.y-m.y;
+          const sl=Math.hypot(sp,tp)||1;
+          m._fbx=m.x+sp/sl*0.7; m._fby=m.y+tp/sl*0.7;
+          m._fbvx=sp/sl*BOSS.fbSpeed; m._fbvy=tp/sl*BOSS.fbSpeed;
+          m._fbLife=Math.max(0.65, Math.min(1.9, sl/BOSS.fbSpeed+0.15));
+          bm.p='flight';
+          bossFx({type:'fb', x:m._fbx, y:m._fby, vx:m._fbvx, vy:m._fbvy});
+        }
+      } else {
+        if (bm.p==='done'){
+          bm.t -= dt;
+          if (bm.t<=0){ bm.move=''; bm.t=0.5; }
+          break;
+        }
+        m._fbLife -= dt;
+        m._fbx += m._fbvx*dt; m._fby += m._fbvy*dt;
+        let burst=false;
+        for (const p of players){
+          if (dist2(p.x,p.y,m._fbx,m._fby) <= (BOSS.fbR+0.35)*(BOSS.fbR+0.35)){ bossFireballExplode(m, players); burst=true; break; }
+        }
+        if (!burst) burst = m._fbLife<=0 ? (bossFireballExplode(m, players), true) : false;
+        if (burst){ bm.p='done'; bm.t=0.4; }
+      }
+      break;
+
+    default: { // inseguimento + artiglio + scelta della prossima mossa
+      if (d > 1.05){
+        tryMoveEntity(world.layout, m, dx, dy, dt, 0.27, world.layout.safeZone);
+      } else if (m.atkCd<=0){
+        if (!m._winding){ m._winding=true; m._windT=W(BOSS.wind); }
+        else {
+          m._windT -= dt;
+          if (m._windT<=0){
+            m._winding=false; m._atkT=0.32;
+            hostDealMonsterHit(tgt.peerId, m.dmg + Math.floor(Math.random()*2), false);
+            m.atkCd = 1.05 + Math.random()*0.35;
+          }
+        }
+      }
+      bm.t -= dt;
+      if (bm.t>0) break;
+      const pick = pickBossMove(m, d);
+      if (pick==='breath'){
+        m._cdB = BOSS.breathCd + Math.random()*1.2;
+        bm.move='breath'; bm.p='wind'; m._winding=true; m._windT=W(BOSS.breathWind);
+        bossFx({type:'growl', x:m.x, y:m.y});
+      } else if (pick==='fireball'){
+        m._cdFb = BOSS.fbCd + Math.random();
+        bm.move='fireball'; bm.p='wind'; m._winding=true; m._windT=W(BOSS.fbWind);
+        bossFx({type:'fbwarn', x:m.x, y:m.y});
+      } else if (pick==='fly'){
+        m._cdFly = BOSS.flyCdMin + Math.random()*(BOSS.flyCdMax-BOSS.flyCdMin);
+        bm.move='fly'; bm.p='flight'; bm.t=BOSS.flyDur; bm.wp=null;
+        bossFx({type:'flyup', x:m.x, y:m.y});
+      } else {
+        bm.t = 0.5 + Math.random()*0.3;
+      }
+      break;
+    }
+  }
+}
+
+/* salto rapido al piano del boss tramite la console segreta: se non si è il
+   custode del mondo, si chiede all'host di rigenerare il piano (host-autorevole) */
+/* ---------- Console dell'Abisso: viaggi e controllo del mondo ---------- */
+function dbgGoBoss(){
+  if (isHost) dbgRegenerateWorld(BOSS_FLOOR, true);
+  else { act.bossjump.send({}); showToast('Richiesta al custode del mondo…'); }
+}
+function dbgGoDepth(n){
+  n = clamp(Math.round(n)||1, 1, 9);
+  if (isHost) dbgRegenerateWorld(n, false);
+  else showToast('Il salto tra i piani richiede il custode del mondo (host).');
+}
+function dbgRegenerateWorld(depth, intoArena){
+  markWorldLived();
+  world.depth = depth;
+  world.seed = (Math.random()*4294967296) >>> 0;
+  world.layout = generateDepth(world.depth);
+  world.boss = { active:false, dead:false };
+  const rng = mulberry32(hashStr(ROOM_CODE+'::'+world.seed+'::dyn::'+world.depth));
+  world.monsters = world.layout.monsterSpawnSpots.map((s,i)=> makeMonster(world.depth+'_'+i, pickMonsterType(rng, world.depth), s.x, s.y, world.depth));
+  if (world.layout.bossRoom){
+    const br = world.layout.bossRoom;
+    world.monsters.push(makeMonster(world.depth+'_boss', 'D', br.center.x, br.center.y, world.depth));
+  }
+  world.chestsOpened = {};
+  world.items = makeInitialItems(world.layout, world.depth, rng);
+  if (me.dead || me.downed){ me.dead=false; me.downed=false; me.downedTimer=0; me.respawnTimer=0; }
+  onDepthArrival(world.depth);
+  if (intoArena && world.layout.bossRoom){
+    // atterraggio diretto nella tana: hostSimTick farà scattare subito la lotta
+    const br = world.layout.bossRoom;
+    me.x = br.x+1.5; me.y = br.y+br.h-1.5;
+  }
+  act.depthchange.send(buildSyncPayload());
+  showToast('🔮 Console: piano '+depth+(intoArena?' — dentro la tana del Drago!':''));
+}
+function dbgTeleportSpawn(){
+  if (!world.layout){ showToast('Nessun piano attivo.'); return; }
+  placeAtSpawn();
+  sendPstate(true);
+  addShake(0.15);
+  showToast('🏠 Sei tornato al punto di spawn.');
+}
+function dbgTeleportArena(){
+  const br = world.layout && world.layout.bossRoom;
+  if (!br){
+    if (isHost) dbgRegenerateWorld(BOSS_FLOOR, true);
+    else { act.bossjump.send({}); showToast('Richiesta al custode del mondo…'); }
+    return;
+  }
+  me.x = br.x+1.5; me.y = br.y+br.h-1.5;
+  sendPstate(true);
+  addShake(0.2);
+  showToast('🐉 Dentro la tana del Drago.');
+}
+function dbgFreeTileNear(x, y){
+  for (let r=0;r<6;r++){
+    for (let dx=-r;dx<=r;dx++) for (let dy=-r;dy<=r;dy++){
+      const nx=x+dx, ny=y+dy;
+      if (canOccupy(world.layout, nx, ny, 0.24)) return {x:nx, y:ny};
+    }
+  }
+  return {x, y};
+}
+function dbgTeleportMouse(){
+  if (!dbgMouseWorld){ showToast('Muovi il mouse sul campo di gioco prima.'); return; }
+  const p = dbgFreeTileNear(dbgMouseWorld.x, dbgMouseWorld.y);
+  me.x = clamp(p.x, 0.5, world.layout.w-0.5);
+  me.y = clamp(p.y, 0.5, world.layout.h-0.5);
+  sendPstate(true);
+  pfxBurst(me.x, me.y, {n:10, colors:['#8fd1ff','#ffffff'], speed:[1,3], size:[2,4], life:[0.2,0.45], add:true});
+  showToast('📍 Teletrasporto.');
+}
+function dbgSpawnBossHere(){
+  if (isHost){
+    world.monsters = world.monsters.filter(m=>m.type!=='D');
+    const dr = makeMonster('m'+world.depth+'_'+(monsterIdCounter++), 'D', Math.floor(me.x), Math.floor(me.y), world.depth);
+    world.monsters.push(dr);
+    world.boss = world.boss || {active:false, dead:false};
+    world.boss.active = true;
+    world.boss.dead = false;
+    if (world.layout.bossRoom) applyBossGates(world.layout, true);
+    act.snapshot.send(buildSyncPayload());
+    showToast('🐲 Drago Minore spawnato qui!');
+  } else showToast('Lo spawn del drago richiede il custode del mondo (host).');
+}
+function dbgKillBoss(){
+  const dr = world.monsters.find(m=>m.type==='D');
+  if (!dr){ showToast('Non c\'è un drago vivo su questo piano.'); return; }
+  hostKillMonster(dr);
+  showToast('💀 Drago annientato dalla console.');
+}
+function dbgForceBossMove(move){
+  if (!isHost){ showToast('Il controllo del drago richiede il custode del mondo (host).'); return; }
+  let dr = world.monsters.find(m=>m.type==='D');
+  if (!dr){ dbgSpawnBossHere(); dr = world.monsters.find(m=>m.type==='D'); }
+  if (!dr) return;
+  world.boss = world.boss || {active:false, dead:false};
+  world.boss.active = true;
+  world.boss.dead = false;
+  if (world.layout.bossRoom) applyBossGates(world.layout, true);
+  const bm = dr._bm = {move:'', t:0, p:''};
+  if (move==='breath'){
+    bm.move='breath'; bm.p='wind'; dr._winding=true; dr._windT=BOSS.breathWind;
+    bossFx({type:'growl', x:dr.x, y:dr.y});
+  } else if (move==='fireball'){
+    bm.move='fireball'; bm.p='wind'; dr._winding=true; dr._windT=BOSS.fbWind;
+    bossFx({type:'fbwarn', x:dr.x, y:dr.y});
+  } else if (move==='fly'){
+    bm.move='fly'; bm.p='flight'; bm.t=BOSS.flyDur; bm.wp=null;
+    bossFx({type:'flyup', x:dr.x, y:dr.y});
+  } else if (move==='dive'){
+    bm.move='dive'; bm.p='wind'; bm.t=BOSS.diveHover; bm.tx=me.x; bm.ty=me.y;
+    dr._winding=true; dr._windT=BOSS.diveHover;
+    bossFx({type:'divewarn', x:me.x, y:me.y});
+  }
+  act.snapshot.send(buildSyncPayload());
+  showToast('🐉 Drago: '+move);
+}
+function dbgSpawnMob(){
+  if (!isHost){ showToast('Lo spawn richiede il custode del mondo (host).'); return; }
+  const t = pickMonsterType(Math.random, world.depth);
+  const m = makeMonster('m'+world.depth+'_'+(monsterIdCounter++), t, Math.floor(me.x), Math.floor(me.y), world.depth);
+  world.monsters.push(m);
+  act.snapshot.send(buildSyncPayload());
+  showToast('👾 '+MONSTER_TYPES[t].name+' spawnato.');
+}
+function dbgCleanMonsters(){
+  if (!isHost){ showToast('La pulizia richiede il custode del mondo (host).'); return; }
+  const kept = world.monsters.filter(m=>m.type==='D');
+  world.monsters = kept;
+  act.snapshot.send(buildSyncPayload());
+  showToast('💨 Nemici ripuliti.');
+}
+function dbgRevealMap(){
+  if (!world.layout) return;
+  world.visited.fill(1);
+  showToast('🕯️ Mappa del piano rilevata.');
+}
+function dbgRevive(){
+  if (me.downed) applyRevive();
+  else if (me.dead){
+    me.dead=false; me.downed=false; me.downedTimer=0; me.respawnTimer=0;
+    handleRespawn();
+    showToast('↩️ Risorto dalla console.');
+  } else showToast('Sei già in piedi.');
+}
+function bossArenaSpawnSpots(n){
+  const br = world.layout.bossRoom;
+  const a = { x: br.x+1.5, y: br.y+br.h-1.5 };
+  const b = { x: br.x+br.w-2.5, y: br.y+br.h-1.5 };
+  const spots = [];
+  for (let i=0;i<n;i++) spots.push(i%2 ? {...b} : {...a});
+  return spots;
+}
+/* eseguito identico su host (chiamata diretta) e client (via act.bosstele) */
+function applyBossFightStart(positions){
+  for (const pid in (positions||{})){
+    const s = positions[pid];
+    if (pid === selfId){ me.x = s.x; me.y = s.y; }
+    else if (remotePlayers.has(pid)){ const rp = remotePlayers.get(pid); rp.x = s.x; rp.y = s.y; rp.rx = s.x; rp.ry = s.y; }
+  }
+  showToast('⚔️ L\'arena si è sigillata: il Drago Minore è scatenato!');
+  logLine('Il Drago Minore ha sigillato la sua tana: la lotta è cominciata!', '#e8a13d', true);
+  addShake(1.1);
+  sfx.bossRoar();
+  sendPstate(true);
+}
+function hostStartBossFight(players){
+  markWorldLived();
+  world.boss.active = true;
+  world.boss.dead = false;
+  applyBossGates(world.layout, true);
+  const positions = {};
+  const spots = bossArenaSpawnSpots(players.length || 1);
+  players.forEach((p,i)=>{
+    const s = spots[i % spots.length];
+    positions[p.peerId] = { x:s.x, y:s.y };
+  });
+  applyBossFightStart(positions);
+  act.bosstele.send({type:'start', positions});
+}
+/* premio del forziere del drago: solo epico/leggendario */
+function makePremiumEquip(rng){
+  const slot = EQUIP_SLOTS[Math.floor(rng()*EQUIP_SLOTS.length)];
+  const tier = rng() < 0.45 ? RARITY_TIERS[3] : RARITY_TIERS[2];
+  const statDefs = pickDistinctStats(tier.statCount, rng);
+  const stats = statDefs.map(def => ({ statKey: def.key, value: Math.round(def.calc(world.depth)*tier.mult) }));
+  return { slot, rarity: tier.key, stats };
+}
+
 function applyMonsterHitToMe(amount, poison){
+  if (DBG.god) return;
   if (me.dead || me.invulnTimer>0) return;
   me.invulnTimer = 0.45;
   me.hitFlashAt = performance.now();
@@ -1700,6 +2427,16 @@ function hostDealMonsterHit(targetPeerId, amount, poison){
 }
 
 function hostResolveChestOpen(chestId){
+  const br = world.layout.bossRoom;
+  if (br && br.chest && chestId === br.chest.id){
+    if (!world.boss || !world.boss.dead) return {ok:false, locked:true};
+    if (world.chestsOpened[chestId]) return {ok:false};
+    markWorldLived();
+    world.chestsOpened[chestId] = true;
+    const gold = 60 + Math.floor(Math.random()*25*world.depth);
+    const equip = makePremiumEquip(Math.random);
+    return {ok:true, gold, potion:true, manaPotion:true, equip};
+  }
   if (world.chestsOpened[chestId]) return {ok:false};
   markWorldLived();
   world.chestsOpened[chestId] = true;
@@ -1803,7 +2540,11 @@ function tryEquipOrSalvage(item){
   }
   sendPstate(true);
 }
-function applyChestResultToMe(ok, gold, potion, equip, manaPotion){
+function applyChestResultToMe(ok, gold, potion, equip, manaPotion, locked){
+  if (locked){
+    showToast('Il forziere del drago è sigillato: solo la sua fine lo aprirà.');
+    return;
+  }
   if (!ok) return;
   sfx.chest();
   me.gold += gold; if (potion) me.potions++; if (manaPotion) me.manaPotions++;
@@ -1816,7 +2557,7 @@ function applyChestResultToMe(ok, gold, potion, equip, manaPotion){
   sendPstate(true);
 }
 function requestChestOpen(chestId){
-  if (isHost){ const r = hostResolveChestOpen(chestId); applyChestResultToMe(r.ok, r.gold, r.potion, r.equip, r.manaPotion); }
+  if (isHost){ const r = hostResolveChestOpen(chestId); applyChestResultToMe(r.ok, r.gold, r.potion, r.equip, r.manaPotion, r.locked); }
   else act.chestreq.send({chestId});
 }
 
@@ -1876,6 +2617,9 @@ async function connectToWorld(){
   act.shotfx = room.makeAction('shotfx');
   act.hostclaim = room.makeAction('hostclaim');
   act.revive = room.makeAction('revive');
+  act.bosstele = room.makeAction('bosstele');
+  act.bossfx = room.makeAction('bossfx');
+  act.bossjump = room.makeAction('bossjump');
   act.worldfp = room.makeAction('worldfp');
 
   /* Riconciliazione mondi: se due host si sono creati mondi separati (scoperta
@@ -1915,7 +2659,7 @@ async function connectToWorld(){
     if (!isHost) return;
     act.chestres.send({chestId, ...hostResolveChestOpen(chestId)}, {target:peerId});
   };
-  act.chestres.onMessage = ({chestId, ok, gold, potion, equip, manaPotion}) => applyChestResultToMe(ok, gold, potion, equip, manaPotion);
+  act.chestres.onMessage = ({chestId, ok, gold, potion, equip, manaPotion, locked}) => applyChestResultToMe(ok, gold, potion, equip, manaPotion, locked);
   act.pickupreq.onMessage = ({itemId}, {peerId}) => {
     if (!isHost) return;
     act.pickupres.send({itemId, ...hostResolvePickup(itemId)}, {target:peerId});
@@ -1950,6 +2694,18 @@ async function connectToWorld(){
     act.sync.request({}, {target:peerId, timeoutMs:1500}).then(res=>{ if (res && res.ok) applyFullState(res); }).catch(()=>{});
   };
   act.revive.onMessage = () => applyRevive();
+  act.bossfx.onMessage = (data) => bossFxLocal(data);
+  act.bossjump.onMessage = () => { if (isHost) dbgRegenerateWorld(BOSS_FLOOR, true); };
+  act.bosstele.onMessage = (data) => {
+    if (!data || !world.layout || !world.layout.bossRoom) return;
+    if (data.type === 'start' && data.positions) applyBossFightStart(data.positions);
+    else if (data.type === 'death'){
+      showToast('⚔️ Il Drago Minore è stato sconfitto!');
+      logLine('La tana del Drago Minore si è aperta: il forziere del drago è tuo.', '#ffd27a', true);
+      addShake(0.9);
+      sfx.bossKill();
+    }
+  };
 
   room.onPeerJoin = peerId => {
     sendPstate(true, peerId);
@@ -2187,7 +2943,7 @@ function useClassAbility(){
   sfx.ability();
   if (me.cls === 'mago') addShake(0.35);
 
-  me.abilityTimer = ab.cooldown;
+  me.abilityTimer = DBG.instantCd ? 0.02 : ab.cooldown;
   if (ab.manaCost) me.mp -= ab.manaCost;
   sendPstate(true);
 }
@@ -2343,8 +3099,9 @@ function tryInteract(){
   }
   const mp = world.layout.merchantPos;
   if (mp && dist2(me.x, me.y, mp.x+0.5, mp.y+0.5) < 2.1*2.1){
-    if (document.getElementById('merchant-panel').classList.contains('show')) closeMerchantPanel();
-    else openMerchantPanel();
+    // il click sulla scritta del mercante apre SOLO: il menu resta aperto per
+    // tutti gli acquisti e si chiude con E/Esc (o cliccando fuori dal pannello)
+    if (!document.getElementById('merchant-panel').classList.contains('show')) openMerchantPanel();
     return;
   }
   const chest = world.layout.chestSpots.find(c => !world.chestsOpened[c.id] && dist2(me.x, me.y, c.x+0.5, c.y+0.5) < 2.1*2.1);
@@ -2397,6 +3154,11 @@ function handleRespawn(){
   me.buffs.rage=0; me.buffs.shield=0; me.buffs.haste=0; me.buffs.focus=0;
   applyClassStats(me.cls); // ricalcola salute/mana massime senza i bonus dell'equipaggiamento perso, e cura al massimo
   placeAtSpawn(); // il punto di rinascita è sempre nella zona sicura d'ingresso
+  // se la lotta col drago è in corso si rinasce DENTRO l'arena, pronti a combattere
+  if (world.layout.bossRoom && world.boss && world.boss.active && !world.boss.dead){
+    const br = world.layout.bossRoom;
+    me.x = br.x+1.5; me.y = br.y+br.h-1.5;
+  }
   document.getElementById('deathscreen').classList.remove('show');
   sendPstate(true);
 }
@@ -2537,20 +3299,24 @@ const SPRITE_FILES = {
   merchant:'assets/sprites/merchant.png',
   mon_spettro:'assets/sprites/mon_spettro.png',
   mon_drago:'assets/sprites/mon_drago.png',
+  mon_orco:'assets/sprites/mon_orco.png',
   chest_closed:'assets/sprites/chest_sheet.png',
   chest_open:'assets/sprites/chest_sheet.png',
 };
-/* sprite sheet orizzontali: numero di celle in riga, tutte di larghezza uguale */
-const SPRITE_SHEET_INFO = { heroes_sheet:4, monsters_sheet1:4, monsters_sheet2:4, chest_sheet:2 };
+/* sprite sheet orizzontali: numero di celle in riga, tutte di larghezza uguale.
+   Le immagini singole (1 cella) contano come sheet da una sola cella: il ritaglio
+   usa tutta l'immagine. */
+const SPRITE_SHEET_INFO = { heroes_sheet:4, monsters_sheet1:4, monsters_sheet2:4, chest_sheet:2, mon_spettro:1, mon_drago:1, mon_orco:1 };
 /* entità -> cella nel relativo sprite sheet (eroi, mostri, forzieri). Se lo sheet
    manca o non è caricato, drawSprite ripiega sul glifo emoji di GLYPH_FALLBACK. */
 const ENTITY_SPRITES = {
   guerriero:{sheet:'heroes_sheet',cell:0}, ladro:{sheet:'heroes_sheet',cell:1}, mago:{sheet:'heroes_sheet',cell:2}, ranger:{sheet:'heroes_sheet',cell:3},
   ratto:{sheet:'monsters_sheet1',cell:0}, pipistrello:{sheet:'monsters_sheet1',cell:1}, goblin:{sheet:'monsters_sheet1',cell:2}, scheletro:{sheet:'monsters_sheet1',cell:3},
   melma:{sheet:'monsters_sheet2',cell:0}, gelatina:{sheet:'monsters_sheet2',cell:1}, zombie:{sheet:'monsters_sheet2',cell:2}, ragno:{sheet:'monsters_sheet2',cell:3},
+  spettro:{sheet:'mon_spettro',cell:0}, drago:{sheet:'mon_drago',cell:0}, orco:{sheet:'mon_orco',cell:0},
   chest_closed:{sheet:'chest_sheet',cell:0}, chest_open:{sheet:'chest_sheet',cell:1},
 };
-/* tipo mostro -> chiave entità (chi non ha sprite, es. 'o' orco, ricade sul glifo) */
+/* tipo mostro -> chiave entità (chi non ha sprite ricade sul glifo) */
 const MONSTER_SPRITE = { r:'ratto', b:'pipistrello', g:'goblin', j:'melma', J:'gelatina', s:'scheletro', o:'orco', z:'zombie', S:'ragno', W:'spettro', D:'drago' };
 /* ritaglio delle parti visibili per le immagini generate su canvas enormi con
    margini trasparenti (torce, scale, icone, texture di pavimenti e muri):
@@ -2657,9 +3423,47 @@ function drawSprite(key, sx, sy, size, alpha, facing, flashT, opts){
     bob = 3+Math.sin(t*2.2+phase)*2; breathe = 1+0.04*Math.sin(t*2.2+phase);
     alphaMul = 0.9+0.1*Math.sin(t*2.2+phase);
   } else if (flavor==='ragno'){
-    if (moving) bob = Math.abs(Math.sin(t*11+phase))*2.6;
+    // ragno: andatura a scatti sincopata — le zampe fisse dell'art "camminano"
+    // grazie al tremore del corpo: ritmo doppio veloce, pompaggio e inclinazione
+    if (moving){
+      const g = t*17+phase;
+      const beat = Math.abs(Math.sin(g));
+      bob = beat*4.5 + Math.abs(Math.sin(g*0.5))*1.8 + Math.sin(t*31+phase)*0.8;
+      rot = Math.sin(g)*0.08 + Math.sin(g*0.5+1.1)*0.035;
+      syScale = 1+beat*0.05;
+      sxScale = 1+(1-beat)*0.035;
+    } else {
+      // fermo ma in tensione, pronto a scattare
+      bob = 1.3+Math.sin(t*6.5+phase)*1.4;
+      rot = Math.sin(t*3.5+phase)*0.03;
+      syScale = 1+0.03*Math.sin(t*6.5+phase);
+    }
   } else if (flavor==='ratto'){
     if (moving) bob = Math.abs(Math.sin(t*9+phase))*2.6;
+  } else if (flavor==='orco'){
+    // orco: passo pesante e ondeggiante da bruto, idle minaccioso, carica nel colpo
+    const atkT = Math.max(0, o.attackT||0);
+    if (atkT>0){
+      // montante: si carica indietro col busto e si accovaccia, poi spinge tutto il corpo
+      const pr = clamp(1-atkT/(o.attackDur||0.3), 0, 1);
+      const p = Math.sin(pr*Math.PI);
+      const wind = pr<0.3 ? Math.sin((pr/0.3)*Math.PI*0.5) : 0;
+      rot = -wind*0.16;
+      syScale = 1-wind*0.06;
+      sxScale = 1-wind*0.04;
+    } else if (moving){
+      const g = t*7+phase;
+      const step = Math.abs(Math.sin(g));
+      bob = step*3.8;
+      rot = Math.sin(g)*0.06;
+      syScale = 1-step*0.05;
+      sxScale = 1+Math.sin(g)*0.025;
+    } else {
+      // in piedi, teso: respiro profondo da gigante e sguardo che lentamente ruota
+      bob = Math.sin(t*2.3+phase)*1.6;
+      rot = Math.sin(t*0.9+phase)*0.035;
+      syScale = 1+0.045*Math.sin(t*2.3+phase);
+    }
   } else {
     if (moving) bob = Math.abs(Math.sin(t*8+phase))*2.2;
   }
@@ -2678,13 +3482,21 @@ function drawSprite(key, sx, sy, size, alpha, facing, flashT, opts){
     sxScale *= 1+0.16*p - windup*0.06;
     syScale *= 1-0.14*p + windup*0.08;
   }
+  // override opzionali per animazioni custom (drago): slancio/se in px, squash absoluti, bob assoluto
+  if (o.lungePx!=null) lunge = o.lungePx;
+  if (o.scaleX!=null) sxScale *= o.scaleX;
+  if (o.scaleY!=null) syScale *= o.scaleY;
+  if (o.bobPx!=null) bob = o.bobPx;
   const half = size/2;
   ctx.globalAlpha = alpha*alphaMul;
-  // ombra ellittica sotto il personaggio (resta ancorata al pavimento col bob)
-  ctx.fillStyle = 'rgba(0,0,0,'+(0.38*alpha)+')';
-  ctx.beginPath();
-  ctx.ellipse(sx, sy+half*0.8, half*0.72, half*0.26, 0, 0, Math.PI*2);
-  ctx.fill();
+  // ombra ellittica sotto il personaggio (resta ancorata al pavimento col bob);
+  // con noShadow la disegna il chiamante (drago in volo: ombra a terra scorporata)
+  if (!o.noShadow){
+    ctx.fillStyle = 'rgba(0,0,0,'+(0.38*alpha)+')';
+    ctx.beginPath();
+    ctx.ellipse(sx, sy+half*0.8, half*0.72, half*0.26, 0, 0, Math.PI*2);
+    ctx.fill();
+  }
   ctx.save();
   ctx.translate(sx+(facing?facing.x*lunge:0), sy+bob+(facing?facing.y*lunge:0));
   if (facing && facing.x<0) ctx.scale(-1,1);
@@ -2819,6 +3631,7 @@ const sfx = {
   crit(){ tone({type:'square',f0:520,f1:150,dur:0.12,v:0.2}); tone({f0:760,f1:320,dur:0.1,v:0.12}); noise({dur:0.1,v:0.14,type:'bandpass',f0:1200,q:1}); },
   kill(){ tone({f0:150,f1:42,dur:0.32,v:0.3}); noise({dur:0.26,v:0.22,type:'lowpass',f0:520}); tone({type:'triangle',f0:90,f1:60,dur:0.2,v:0.15,delay:0.05}); },
   bossKill(){ sfx.kill(); tone({f0:70,f1:30,dur:0.7,v:0.35}); noise({dur:0.5,v:0.3,type:'lowpass',f0:350}); },
+  bossRoar(){ tone({type:'sawtooth',f0:80,f1:42,dur:0.9,v:0.3}); tone({f0:55,f1:30,dur:1.1,v:0.28,delay:0.05}); noise({dur:0.8,v:0.25,type:'lowpass',f0:300}); },
   hurt(){ tone({type:'sawtooth',f0:190,f1:70,dur:0.18,v:0.22}); noise({dur:0.12,v:0.14,type:'lowpass',f0:500}); },
   death(){ tone({type:'sawtooth',f0:140,f1:35,dur:0.7,v:0.3}); tone({f0:80,f1:30,dur:0.9,v:0.3,delay:0.05}); noise({dur:0.6,v:0.2,type:'lowpass',f0:300}); },
   pickup(){ tone({f0:880,dur:0.07,v:0.12}); tone({f0:1318,dur:0.1,v:0.12,delay:0.07}); },
@@ -3323,6 +4136,34 @@ function render(dt){
     }
   }
 
+  // barriera della tana: quando la lotta è in corso i cancelli diventano muri di
+  // fuoco pulsante — nessun ingresso né uscita finché il drago non è caduto
+  const bossGate = world.layout.bossRoom;
+  if (bossGate && world.boss && world.boss.active && !world.boss.dead && bossGate.gates){
+    let nearestGate = null, nd = Infinity;
+    for (const g of bossGate.gates){
+      const dd = (g.x-me.x)*(g.x-me.x)+(g.y-me.y)*(g.y-me.y);
+      if (dd<nd){ nd=dd; nearestGate=g; }
+    }
+    for (const g of bossGate.gates){
+      const gkey = g.x+','+g.y;
+      if (!me.isSpectator && !world.visibleSet.has(gkey)) continue;
+      const gx=(g.x-camX)*tile, gy=(g.y-camY)*tile;
+      const pul = 0.30+0.14*Math.sin(torchClock*7+(g.x*7+g.y*11));
+      const grd = ctx.createLinearGradient(gx, gy, gx, gy+tile);
+      grd.addColorStop(0, 'rgba(255,96,44,'+(pul*1.5)+')');
+      grd.addColorStop(1, 'rgba(120,20,10,'+pul+')');
+      ctx.fillStyle = grd;
+      ctx.fillRect(gx, gy, tile, 4);
+      ctx.fillStyle = 'rgba(255,190,120,'+(0.7+0.3*Math.sin(torchClock*11+g.x))+')';
+      ctx.fillRect(gx+4, gy+tile*0.5-1, tile-8, 2);
+      if (g===nearestGate)
+        drawGlyph('⛔', gx+tile/2, gy+tile*0.5, '#ffd27a', 0.85+0.15*Math.sin(torchClock*7+g.y), Math.round(tile*0.45));
+    }
+  }
+  // il segno sbarrato compare solo sul cancello d'ingresso (il più vicino a chi è
+  // nella tana), la barriera di fuoco resta su tutti gli accessi del corridoio
+
   // torce: alone di luce calda tremolante (additiva, sotto le entità) + fiamma
   for (const tc of layout.torches){
     const tkey = tc.x+','+tc.y;
@@ -3410,6 +4251,19 @@ function render(dt){
       ctx.strokeStyle = 'rgba(255,60,50,'+(0.55+0.35*Math.sin(torchClock*22))+')';
       ctx.lineWidth = tile*0.06;
       ctx.beginPath(); ctx.arc(sx, sy, Math.max(tile*0.3,ringR), 0, Math.PI*2); ctx.stroke();
+      // bagliore alla gola del drago mentre carica soffio o palla di fuoco
+      const bbm = m._bm;
+      if (bbm && (bbm.move==='breath' || bbm.move==='fireball')){
+        const gx = (m.rx+m.facing.x*0.75-camX)*tile, gy = (m.ry+m.facing.y*0.75-camY)*tile;
+        const gr = tile*(0.3+0.13*Math.sin(torchClock*30));
+        const gg = ctx.createRadialGradient(gx, gy, 0, gx, gy, gr);
+        const fireC = bbm.move==='fireball' ? '#ffb03d' : '#ff7a2d';
+        gg.addColorStop(0, hexToRgba('#fff3c4', 0.9));
+        gg.addColorStop(0.45, hexToRgba(fireC, 0.75));
+        gg.addColorStop(1, hexToRgba(fireC, 0));
+        ctx.fillStyle = gg;
+        ctx.fillRect(gx-gr, gy-gr, gr*2, gr*2);
+      }
     } else if (t.boss){
       m._windLocalStart = null;
     }
@@ -3425,17 +4279,108 @@ function render(dt){
     if (m.hp < m._hp) m.hitFlash = 0.12;
     m._hp = m.hp;
     if (m.hitFlash>0) m.hitFlash = Math.max(0, m.hitFlash-dt);
-    if (m._atkCd!=null && m.atkCd - m._atkCd > 0.5) m.attackAnimT = 0.3;
+    if (m._atkCd!=null && m.atkCd - m._atkCd > 0.5) m.attackAnimT = m.type==='o' ? 0.5 : 0.3;
     m._atkCd = m.atkCd;
     if (m.attackAnimT>0) m.attackAnimT = Math.max(0, m.attackAnimT-dt);
     const moving = dist2(m.rx, m.ry, m._px!=null?m._px:m.rx, m._py!=null?m._py:m.ry) > 1e-6;
     m._px = m.rx; m._py = m.ry;
     // per il watcher delle morti lato client
     monsterLastSeen.set(m.id, {x:m.rx, y:m.ry, t:performance.now(), color:MONSTER_TYPES[m.type].color});
-    drawSprite(MONSTER_SPRITE[m.type], sx, sy, Math.round(tile*(t.boss?1.05:0.78)), 1, m.facing, m.hitFlash, {
-      moving, boss:!!t.boss, attackT:m.attackAnimT||0, attackDur:0.3, lunge:0.18, flavor:m.type, phase:hashStr(String(m.id))%100, flashColor:'#ff5040',
+    const bbm = m._bm;
+    const tNow = performance.now();
+    // --- animazione custom del Drago (stesse leve di drawSprite: bob/rot/lunge/squash
+    //     + ali vettoriali + quota in volo), spinta dallo stato _bm replicato ---
+    let lift = 0, bobPx = 0, rot = 0, lungePx = 0, sxM = 1, syM = 1;
+    let noShadow = false, diveProg = 0;
+    let scale = Math.round(tile*(t.boss?1.05:0.78));
+    if (t.boss && bbm){
+      // timer locale ricostruito: si azzera a ogni cambio di mossa
+      if (m._dSpellKey !== bbm.move){ m._dSpellKey = bbm.move; m._dSpellT = tNow; }
+      const st = Math.max(0, (tNow-(m._dSpellT||tNow))*0.001);
+      const flap = Math.sin(torchClock*9 + hashStr(String(m.id))%10);
+      if (bbm.move==='breath'){
+        const w = BOSS.breathWind, burn = BOSS.breathBurn;
+        if (st < w){ // carica del soffio: si raccoglie indietro, corpo teso
+          const k = Math.sin((st/Math.max(0.001,w))*Math.PI);
+          lungePx = -k*tile*0.10; syM = 1+k*0.08; rot = 0.05*k;
+        } else { // fiamme: slancio in avanti con stretch
+          const k = Math.sin(Math.min(1,(st-w)/Math.max(0.001,burn))*Math.PI);
+          lungePx = k*tile*0.16; sxM = 1+k*0.11; syM = 1-k*0.11;
+        }
+      } else if (bbm.move==='fireball'){
+        const w = BOSS.fbWind;
+        if (st < w){
+          const k = Math.sin((st/Math.max(0.001,w))*Math.PI);
+          lungePx = -k*tile*0.10; syM = 1+k*0.08; rot = 0.05*k;
+        } else { // sputo di fuoco: testata in avanti decisa
+          const k = Math.sin(Math.min(1,(st-w)/0.45)*Math.PI);
+          lungePx = k*tile*0.19; sxM = 1+k*0.05;
+        }
+      } else if (bbm.move==='fly'){
+        // VOLO REALE: quota alta, corpo che oscilla col battito, scie sotto le ali
+        noShadow = true;
+        syM = 1+flap*0.07; rot = flap*0.05;
+        bobPx = -Math.abs(flap)*tile*0.04;
+        lift = Math.round(tile*0.42 + Math.abs(flap)*tile*0.06);
+        scale = Math.max(26, Math.round(scale*0.92));
+        if (Math.random()<dt*5) // scie d'aria/scintille sotto le ali
+          pfxBurst(m.rx-0.15, m.ry+0.4, {n:1, colors:['#ff9f3d','#e8c88a'], speed:[0,0.5], size:[1.2,2.4], life:[0.35,0.6], type:'dot', grav:0.2});
+      } else if (bbm.move==='dive'){
+        // picchiata: hover in quota col battito d'ali, poi tuffo verticale — cade
+        // allungandosi e termina a terra con uno schiocco (squash) a diveProg->1
+        if (m._divePrevMove !== 'dive'){ m._divePrevMove = 'dive'; m._diveLocalStart = tNow; }
+        diveProg = clamp((tNow-(m._diveLocalStart||tNow))/(BOSS.diveHover*1000), 0, 1);
+        const hover = Math.sin(tNow*0.02)*tile*0.03;
+        lift = Math.round((1-diveProg)*tile*0.45 + hover);
+        syM = 1+diveProg*0.16; sxM = 1-diveProg*0.07;
+        if (diveProg<0.5) noShadow = true;
+        if (diveProg>=0.97){ syM = 0.92; sxM = 1.06; } // impatto a terra
+      }
+    }
+    // ombra a terra scorporata (solo quando il corpo non ne disegna una propria):
+    // più piccola e fioca con la quota, rimpicciolisce fino a sparire col drago che si abbassa
+    if (t.boss && noShadow && lift>tile*0.05){
+      const k = 1-Math.min(1, lift/(tile*0.7));
+      ctx.globalAlpha = 0.24+0.16*k;
+      ctx.fillStyle = '#000';
+      ctx.beginPath();
+      ctx.ellipse(sx, sy, tile*(0.36+0.16*k), tile*(0.13+0.05*k), 0, 0, Math.PI*2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+    drawSprite(MONSTER_SPRITE[m.type], sx, sy-lift, scale, 1, m.facing, m.hitFlash, {
+      moving, boss:!!t.boss, attackT:m.attackAnimT||0, attackDur:m.type==='o'?0.5:0.3, lunge:m.type==='o'?0.34:0.18, flavor:MONSTER_SPRITE[m.type]||m.type, phase:hashStr(String(m.id))%100, flashColor:'#ff5040',
+      noShadow, lungePx, bobPx, scaleX:sxM, scaleY:syM, rot,
     });
-    if (m.hp < m.maxHp) drawHpBar(sx, sy-tile*0.62, tile*0.9, m.hp/m.maxHp, '#c1443a');
+    if (m.hp < m.maxHp) drawHpBar(sx, sy-tile*0.62-(lift>0?tile*0.18:0), tile*0.9, m.hp/m.maxHp, '#c1443a');
+    // preavviso picchiata: doppio anello + disco ardente sul bersaglio annunciato
+    if (t.boss && bbm && bbm.move==='dive' && bbm.tx!=null){
+      const tPulse = 0.6+0.4*Math.sin(torchClock*9);
+      const wx=(bbm.tx-camX)*tile, wy=(bbm.ty-camY)*tile;
+      const R0 = tile*BOSS.diveR;
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.strokeStyle = 'rgba(255,70,50,'+(0.6*tPulse)+')';
+      ctx.lineWidth = tile*0.08;
+      ctx.beginPath(); ctx.arc(wx, wy, R0, 0, Math.PI*2); ctx.stroke();
+      ctx.strokeStyle = 'rgba(255,190,80,0.85)';
+      ctx.lineWidth = tile*0.1;
+      ctx.beginPath(); ctx.arc(wx, wy, Math.max(tile*0.15, R0*(1-diveProg)), 0, Math.PI*2); ctx.stroke();
+      const dgC = ctx.createRadialGradient(wx, wy, 0, wx, wy, R0);
+      dgC.addColorStop(0, hexToRgba('#ff6a2d', 0.5*(1-diveProg)));
+      dgC.addColorStop(1, hexToRgba('#ff6a2d', 0));
+      ctx.fillStyle = dgC;
+      ctx.beginPath(); ctx.arc(wx, wy, R0, 0, Math.PI*2); ctx.fill();
+      // colonna di luce rossa segnalatrice: un faro sul punto dove il drago si schianterà
+      const colG = ctx.createLinearGradient(wx, wy, wx, wy-tile*(3.2+2.5*(1-diveProg)));
+      colG.addColorStop(0, hexToRgba('#ff4030', 0.32+0.16*Math.sin(torchClock*9)));
+      colG.addColorStop(1, hexToRgba('#ff4030', 0));
+      ctx.fillStyle = colG;
+      ctx.fillRect(wx-tile*0.22, wy-tile*(3.2+2.5*(1-diveProg)), tile*0.44, tile*(3.2+2.5*(1-diveProg)));
+      ctx.globalCompositeOperation = 'source-over';
+      if (diveProg>0.94) drawLabel('!!', wx, wy-tile*1.5, '#ffd27a', 15);
+    } else if (t.boss){
+      m._divePrevMove = '';
+    }
   }
 
   // remote players
@@ -3513,13 +4458,19 @@ function render(dt){
       ctx.lineTo((b.x-camX)*tile, (b.y-camY)*tile);
       ctx.stroke();
     }
-    ctx.globalAlpha = 0.35;
+    ctx.globalAlpha = pr.boss?0.55:0.35;
     ctx.fillStyle = pr.color;
-    ctx.beginPath(); ctx.arc(sx, sy, tile*0.26, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(sx, sy, tile*(pr.boss?0.32:0.26), 0, Math.PI*2); ctx.fill();
+    if (pr.boss){ // palla di fuoco del drago: nucleo bianco-incandescente, niente emoji
+      ctx.globalAlpha = 0.85;
+      ctx.fillStyle = '#ffe9b0';
+      ctx.beginPath(); ctx.arc(sx, sy, tile*0.15, 0, Math.PI*2); ctx.fill();
+    }
     ctx.globalAlpha = 1;
   }
   ctx.globalCompositeOperation = 'source-over';
   for (const pr of projectiles){
+    if (pr.boss) continue; // solo la sfera luminosa, senza glifo
     const sx=(pr.x-camX)*tile, sy=(pr.y-camY)*tile;
     drawGlyph(pr.glyph, sx, sy, pr.color, 1, Math.round(tile*0.6), true);
   }
@@ -3562,6 +4513,26 @@ function render(dt){
       }
     }
     ctx.globalAlpha = 1;
+  }
+  ctx.globalCompositeOperation = 'source-over';
+
+  // lingua di fuoco del Drago Minore: cono vettoriale che si allarga dissolvendosi
+  ctx.globalCompositeOperation = 'lighter';
+  for (const c of bossCones){
+    const t = 1 - c.life/c.maxLife;
+    const r = c.len*tile*Math.min(1, (t+0.15)*1.1);
+    const sx=(c.x-camX)*tile, sy=(c.y-camY)*tile;
+    const a0 = c.ang - 0.55 - t*0.28, a1 = c.ang + 0.55 + t*0.28;
+    const grad = ctx.createLinearGradient(sx, sy, sx+Math.cos(c.ang)*r, sy+Math.sin(c.ang)*r);
+    grad.addColorStop(0, 'rgba(255,130,40,'+(0.85*(1-t))+')');
+    grad.addColorStop(0.6, 'rgba(255,90,25,'+(0.5*(1-t))+')');
+    grad.addColorStop(1, 'rgba(255,40,20,0)');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.moveTo(sx, sy);
+    ctx.arc(sx, sy, Math.max(tile*0.1, r), a0, a1);
+    ctx.closePath();
+    ctx.fill();
   }
   ctx.globalCompositeOperation = 'source-over';
 
@@ -3726,7 +4697,7 @@ function updateLocalPlayer(dt){
   }
   if (CLASSES[me.cls].maxMp>0 && me.mp<me.maxMp){ me.mp = Math.min(me.maxMp, me.mp+dt*0.8); }
 
-  me.speed = CLASSES[me.cls].speed * (me.buffs.haste>0 ? 1.4 : 1) * (1 + computeEquipBonus().speedPct/100);
+  me.speed = CLASSES[me.cls].speed * (me.buffs.haste>0 ? 1.4 : 1) * (1 + computeEquipBonus().speedPct/100) * DBG.speedMult;
   let dx=0, dy=0;
   if (keys.up) dy-=1;
   if (keys.down) dy+=1;
@@ -3826,6 +4797,10 @@ function updateShockwaves(dt){
     shockwaves[i].life -= dt;
     if (shockwaves[i].life<=0) shockwaves.splice(i,1);
   }
+  for (let i=bossCones.length-1;i>=0;i--){
+    bossCones[i].life -= dt;
+    if (bossCones[i].life<=0) bossCones.splice(i,1);
+  }
 }
 
 function updateRemoteSmoothing(dt){
@@ -3857,6 +4832,12 @@ function hostSimTick(dt){
   const players = [];
   if (!me.dead && !me.isSpectator) players.push({peerId:selfId, x:me.x, y:me.y});
   for (const [pid,p] of remotePlayers){ if (!p.dead && !p.spectator && p.x!=null) players.push({peerId:pid, x:p.x, y:p.y}); }
+  // il boss scatta appena QUALSIASI giocatore vivo mette piede nella tana
+  const br = world.layout ? world.layout.bossRoom : null;
+  if (br && world.boss && !world.boss.active && !world.boss.dead){
+    const entered = players.some(p=> p.x>=br.x && p.x<br.x+br.w && p.y>=br.y && p.y<br.y+br.h);
+    if (entered) hostStartBossFight(players);
+  }
   for (const m of world.monsters) updateMonsterAI(m, dt, players);
   hostRespawnTick(dt);
   const now = performance.now();
@@ -3970,6 +4951,22 @@ function updateHUD(){
     }
   }
   if (buffsRow.__lastHtml !== buffsHtml){ buffsRow.innerHTML = buffsHtml; buffsRow.__lastHtml = buffsHtml; }
+  updateBossBar();
+}
+function updateBossBar(){
+  const el = document.getElementById('boss-bar');
+  if (!el) return;
+  const live = !!(world.boss && world.boss.active && !world.boss.dead);
+  const dragon = world.monsters.find(m=>m.type==='D');
+  if (live && dragon){
+    el.classList.add('show');
+    const nameEl = document.getElementById('boss-bar-name');
+    const fillEl = document.getElementById('boss-bar-fill');
+    if (nameEl && nameEl.textContent !== '🐉 Drago Minore') nameEl.textContent = '🐉 Drago Minore';
+    fillEl.style.width = Math.max(0, Math.round(dragon.hp/dragon.maxHp*100))+'%';
+  } else {
+    el.classList.remove('show');
+  }
 }
 function refreshPeerList(){
   const wrap = document.getElementById('peers-list');
@@ -4149,6 +5146,8 @@ const chatInput = document.getElementById('chat-input');
 function chatOpen(){ return chatInput.classList.contains('show'); }
 
 window.addEventListener('keydown', (e)=>{
+  // console segreta: Ctrl+Shift+D apre/chiude il pannello anche durante la chat
+  if (e.ctrlKey && e.shiftKey && e.code === 'KeyD'){ toggleDebugMenu(); e.preventDefault(); return; }
   if (chatOpen()){
     if (e.code==='Escape'){ closeChat(); }
     else if (e.code==='Enter'){ submitChat(); }
@@ -4186,6 +5185,92 @@ window.addEventListener('keyup', (e)=>{
 });
 canvas.addEventListener('mousedown', ()=>{ if(!chatOpen()) keys.attack=true; });
 window.addEventListener('mouseup', ()=>{ keys.attack=false; });
+
+/* ---------- Console segreta di sviluppo (Ctrl+Shift+D) ---------- */
+let dbgWired = false;
+function toggleDebugMenu(){
+  const p = document.getElementById('dbg-panel');
+  if (!p) return;
+  const show = !p.classList.contains('show');
+  p.classList.toggle('show', show);
+  p.style.display = show ? 'block' : 'none';
+  if (!dbgWired){ wireDebugMenu(); dbgWired = true; }
+  if (show) sfx.pickup(); else sfx.click();
+}
+/* i comandi che toccano lo stato del mondo condiviso girano solo sull'host */
+function dbgRequiresHost(actName){
+  return ['godept','bossSummon','bossKill','moveBreath','moveFb','moveFly','moveDive','clean','spawnMob'].includes(actName);
+}
+function wireDebugMenu(){
+  const on = (id, fn) => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('change', ()=> fn(el.checked));
+  };
+  on('dbg-speed', v => DBG.speedMult = v ? 5 : 1);
+  on('dbg-god', v => DBG.god = v);
+  on('dbg-icd', v => DBG.instantCd = v);
+  on('dbg-bfz', v => DBG.bossInstant = v);
+  on('dbg-frz', v => DBG.bossFreeze = v);
+  on('dbg-demo', v => DBG.bossDemo = v);
+  const closeBtn = document.getElementById('dbg-close');
+  if (closeBtn) closeBtn.addEventListener('click', ()=> toggleDebugMenu());
+  const panel = document.getElementById('dbg-panel');
+  if (panel) panel.addEventListener('click', (e)=>{
+    const btn = e.target.closest('[data-act]');
+    if (!btn) return;
+    const a = btn.getAttribute('data-act');
+    sfx.click();
+    if (a==='close'){ toggleDebugMenu(); return; }
+    if (dbgRequiresHost(a) && !isHost){ showToast('Comando riservato al custode del mondo (host).'); return; }
+    switch (a){
+      case 'spawn': dbgTeleportSpawn(); break;
+      case 'arena': dbgTeleportArena(); break;
+      case 'mouse': dbgTeleportMouse(); break;
+      case 'godept': dbgGoDepth(parseInt(document.getElementById('dbg-depth').value, 10)); break;
+      case 'revive': dbgRevive(); break;
+      case 'heal':
+        sfx.potion();
+        me.hp = me.maxHp;
+        if (CLASSES[me.cls].maxMp>0) me.mp = me.maxMp;
+        sendPstate(true);
+        showToast('❤️ Rigenerato dalla console.');
+        break;
+      case 'gold':
+        sfx.gem();
+        me.gold += 1000;
+        sendPstate(true);
+        showToast('🪙 +1000 oro.');
+        break;
+      case 'potions':
+        sfx.potion();
+        me.potions += 5;
+        sendPstate(true);
+        showToast('🧪 +5 pozioni di salute.');
+        break;
+      case 'mpotions':
+        sfx.mana();
+        me.manaPotions += 5;
+        sendPstate(true);
+        showToast('🔮 +5 pozioni di mana.');
+        break;
+      case 'bossSummon': dbgSpawnBossHere(); break;
+      case 'bossKill': dbgKillBoss(); break;
+      case 'moveBreath': dbgForceBossMove('breath'); break;
+      case 'moveFb': dbgForceBossMove('fireball'); break;
+      case 'moveFly': dbgForceBossMove('fly'); break;
+      case 'moveDive': dbgForceBossMove('dive'); break;
+      case 'reveal': dbgRevealMap(); break;
+      case 'clean': dbgCleanMonsters(); break;
+      case 'spawnMob': dbgSpawnMob(); break;
+    }
+  });
+}
+/* posizione del cursore nel mondo, per il teletrasporto "dove punta il mouse" */
+let dbgMouseWorld = null;
+canvas.addEventListener('mousemove', (e)=>{
+  const rect = canvas.getBoundingClientRect();
+  dbgMouseWorld = screenToWorld(e.clientX-rect.left, e.clientY-rect.top);
+});
 
 /* ---------------------------------------------------------------------
    15. Tooltip al passaggio del mouse su mostri, oggetti, forzieri, scale
@@ -4349,6 +5434,11 @@ document.addEventListener('click', (e)=>{
   const merchantPanel = document.getElementById('merchant-panel');
   if (merchantPanel.classList.contains('show') && !merchantPanel.contains(e.target)) closeMerchantPanel();
 });
+/* i click dentro il pannello del mercante non devono propagare al document:
+   renderMerchantPanel ricostruisce l'innerHTML e stacca il bottone cliccato dal
+   DOM mentre l'evento sta ancora salendo, facendo fallire il contains() sopra e
+   chiudendo il menu a ogni acquisto. */
+document.getElementById('merchant-panel').addEventListener('click', (e)=>{ e.stopPropagation(); });
 
 /* help panel */
 const helpPanel = document.getElementById('help-panel');
@@ -4391,17 +5481,19 @@ function maybeShowInteractPrompt(){
   if (me.downed){ if (interactPromptShown){ interactPromptShown=false; hideInteractBtn(); } return; }
   const tx=Math.floor(me.x), ty=Math.floor(me.y);
   const onStairs = world.layout.grid[ty] && world.layout.grid[ty][tx]===T_STAIRS;
-  const nearChest = world.layout.chestSpots.some(c=>!world.chestsOpened[c.id] && dist2(me.x,me.y,c.x+0.5,c.y+0.5) < 2.1*2.1);
+  const brInfo = world.layout.bossRoom;
+  const nearBossChest = !!(brInfo && brInfo.chest && !world.chestsOpened[brInfo.chest.id] && (!world.boss || !world.boss.dead) && dist2(me.x,me.y,brInfo.chest.x+0.5,brInfo.chest.y+0.5) < 2.1*2.1);
+  const nearChest = world.layout.chestSpots.some(c=>!world.chestsOpened[c.id] && dist2(me.x,me.y,c.x+0.5,c.y+0.5) < 2.1*2.1) && !nearBossChest;
   const mp = world.layout.merchantPos;
   const nearMerchant = mp && dist2(me.x,me.y,mp.x+0.5,mp.y+0.5) < 2.1*2.1;
   let nearDowned = false;
   for (const [,p] of remotePlayers){ if (p.downed && !p.dead && dist2(me.x,me.y,p.x,p.y) < 1.6*1.6){ nearDowned=true; break; } }
-  const should = onStairs || nearChest || nearMerchant || nearDowned;
+  const should = onStairs || nearChest || nearMerchant || nearDowned || nearBossChest;
   if (should && !interactPromptShown){
     interactPromptShown = true;
     const reviveIcon = '<img class="hud-icon" src="assets/sprites/rianima.png" alt=""'+IMG_FALLBACK_ATTR+'><span class="hud-icon-fallback">💗</span>';
     const merchantIcon = '<img class="hud-icon" src="assets/sprites/merchant.png" alt=""'+IMG_FALLBACK_ATTR+'><span class="hud-icon-fallback">🏪</span>';
-    showInteractBtn(nearDowned ? reviveIcon+' Tieni premuto: rianima' : (onStairs ? 'Scendi ⬇' : (nearMerchant ? merchantIcon+' Mercante' : 'Apri forziere ▣')));
+    showInteractBtn(nearDowned ? reviveIcon+' Tieni premuto: rianima' : (onStairs ? 'Scendi ⬇' : (nearMerchant ? merchantIcon+' Mercante' : (nearBossChest ? 'Forziere del drago: sigillato' : 'Apri forziere ▣'))));
   } else if (!should && interactPromptShown){
     interactPromptShown = false;
     hideInteractBtn();
@@ -4417,6 +5509,9 @@ function showInteractBtn(label){
     interactBtnEl.addEventListener('pointerup', (e)=>{ e.preventDefault(); keys.interact=false; });
     interactBtnEl.addEventListener('pointerleave', ()=>{ keys.interact=false; });
     interactBtnEl.addEventListener('pointercancel', ()=>{ keys.interact=false; });
+    // il click che segue il pointerdown non deve propagare al document, altrimenti
+    // l'handler globale chiude subito il pannello del mercante appena aperto
+    interactBtnEl.addEventListener('click', (e)=>{ e.preventDefault(); e.stopPropagation(); });
     document.getElementById('hud').appendChild(interactBtnEl);
   }
   interactBtnEl.innerHTML = label;
@@ -4584,5 +5679,63 @@ document.getElementById('login-submit').addEventListener('click', ()=>{
 });
 
 </script>
+<div id="dbg-panel" class="panel">
+  <div class="dbg-head">
+    <span class="dbg-title">&#128302; Console dell'Abisso</span>
+    <button class="dbg-close" id="dbg-close" title="Chiudi (Ctrl+Shift+D)">&#10005;</button>
+  </div>
+  <div class="dbg-body">
+    <div class="dbg-sec">
+      <div class="dbg-sec-title">Viaggio</div>
+      <div class="dbg-grid">
+        <button data-act="spawn">&#127968; Spawn</button>
+        <button data-act="arena">&#128009; Tana del Drago</button>
+        <button data-act="mouse">&#128205; Dove punta il mouse</button>
+        <button data-act="revive">&#8617;&#65039; Rianima</button>
+      </div>
+      <div class="dbg-inputrow">Piano
+        <input type="number" id="dbg-depth" min="1" max="9" value="5">
+        <button data-act="godept">Vai</button>
+      </div>
+    </div>
+    <div class="dbg-sec">
+      <div class="dbg-sec-title">Eroe</div>
+      <div class="dbg-grid">
+        <button data-act="heal">&#10084;&#65039; Cura completa</button>
+        <button data-act="gold">&#129523; +1000 oro</button>
+        <button data-act="potions">&#129525; +5 pozioni</button>
+        <button data-act="mpotions">&#128302; +5 mana</button>
+      </div>
+      <label class="dbg-switch"><input type="checkbox" id="dbg-speed"><span class="trk"></span><span>Velocit&agrave; &times;5</span></label>
+      <label class="dbg-switch"><input type="checkbox" id="dbg-god"><span class="trk"></span><span>Dio (invincibile)</span></label>
+      <label class="dbg-switch"><input type="checkbox" id="dbg-icd"><span class="trk"></span><span>Ricariche istantanee</span></label>
+    </div>
+    <div class="dbg-sec">
+      <div class="dbg-sec-title">Drago</div>
+      <div class="dbg-grid">
+        <button data-act="bossSummon">&#128018; Spawna qui</button>
+        <button data-act="bossKill" class="danger">&#128128; Uccidi</button>
+      </div>
+      <div class="dbg-grid dbg-mt">
+        <button data-act="moveBreath">&#128293; Soffio</button>
+        <button data-act="moveFb">&#128293; Palla</button>
+        <button data-act="moveFly">&#129689; Volo</button>
+        <button data-act="moveDive">&#11015;&#65039; Picchiata</button>
+      </div>
+      <label class="dbg-switch"><input type="checkbox" id="dbg-bfz"><span class="trk"></span><span>Attacchi immediati</span></label>
+      <label class="dbg-switch"><input type="checkbox" id="dbg-frz"><span class="trk"></span><span>Drago congelato</span></label>
+      <label class="dbg-switch"><input type="checkbox" id="dbg-demo"><span class="trk"></span><span>Demo automatica mosse</span></label>
+    </div>
+    <div class="dbg-sec">
+      <div class="dbg-sec-title">Mondo</div>
+      <div class="dbg-grid">
+        <button data-act="reveal">&#128367;&#65039; Rileva mappa</button>
+        <button data-act="clean">&#128168; Pulisci nemici</button>
+        <button data-act="spawnMob">&#128125; Spawna mostro</button>
+      </div>
+    </div>
+  </div>
+  <div class="dbg-foot">Strumenti del custode del mondo — Ctrl+Shift+D per aprire/chiudere</div>
+</div>
 </body>
 </html>

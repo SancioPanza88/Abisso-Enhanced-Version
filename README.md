@@ -4,10 +4,11 @@ Roguelike multiplayer in tempo reale, senza server, in un unico file.
 
 - 🎬 Video originale: https://www.youtube.com/watch?v=Pxu4IHBrLTU
 - 🎮 Gioco originale: https://www.youdev.it/games/abisso.html
-- 🚀 Questa versione: (https://sanciopanza88.github.io/Abisso-Enhanced-Version/)
+- 🚀 Questa versione: https://github.com/SancioPanza88/Abisso-Enhanced-Version
+
 ## Come si gioca
 
-1. Apri `https://sanciopanza88.github.io/Abisso-Enhanced-Version/` in un browser moderno.
+1. Apri `abisso.html` in un browser moderno.
 2. Scegli nome, classe e stanza, poi scendi nell'abisso.
 3. Per giocare con altri condividi l'indirizzo (stessa stanza = stesso mondo).
 
@@ -17,11 +18,17 @@ Roguelike multiplayer in tempo reale, senza server, in un unico file.
 - **Torce e luci**: le stanze sono illuminate da torce tremolanti, visibili solo nelle zone esplorate.
 - **Suoni**: effetti sonori e musiche generate al volo (nessun file audio), pulsante per silenziare.
 - **Effetti visivi**: particelle, esplosioni, polvere ai passi, fendenti d'arma, schermo che trema.
+- **Boss**: il Drago Minore attende in una tana-arena in fondo alla mappa, con soffio di fuoco, palle di fuoco e attacchi in picchiata; il combattimento si scatena entrando nella tana.
+- **Mercante**: nella zona sicura vende pozioni, potenziamenti ed equipaggiamento a sorte.
+- **Equipaggiamento**: elmi, armature, anelli e altri oggetti con rarità crescenti (comune, raro, epico, leggendario) e statistiche casuali.
+- **Permadeath**: se muori perdi oro, pozioni ed equipaggiamento; prima della fine cadi a terra e un compagno può rianimarti.
 - **Minimappa**: mostra mappa esplorata, scale, forzieri, mercante e compagni (tasto M).
 - **Frecce ai bordi**: indicano dove sono i compagni fuori schermo.
+- **Chat**: testuale con bolle sopra i personaggi e vocale opzionale (microfono).
+- **Modalità spettatore**: entra nel mondo come osservatore senza giocare.
 - **Flash di danno**: lo schermo si tinge di rosso dal lato da cui arriva il colpo.
 - **Multiplayer più affidabile**: connessioni più stabili, e se due mondi si dividono si ricongiungono da soli.
-- **Qualità della vita**: barra HP nuova con flash, toast di benvenuto, clic sullo zoom per azzerarlo, pulsante d'interazione per il touch.
+- **Qualità della vita**: barra HP nuova con flash, toast di benvenuto, abilità di classe, pozioni di mana, clic sullo zoom per azzerarlo, pulsanti d'interazione per il touch.
 
 ## Comandi
 
