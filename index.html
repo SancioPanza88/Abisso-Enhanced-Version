@@ -3276,6 +3276,10 @@ const SPRITE_FILES = {
   chest_sheet:'assets/sprites/chest_sheet.png',
   torch:'assets/sprites/torch.png',
   stairs:'assets/sprites/stairs.png',
+  fp_spada:'assets/first person weapons/spada.png',
+  fp_pugnale:'assets/first person weapons/pugnale.png',
+  fp_bastone:'assets/first person weapons/bastone.png',
+  fp_arco:'assets/first person weapons/arco.png',
   icon_lightning:'assets/sprites/icon_lightning.png',
   icon_gem_blue:'assets/sprites/icon_gem_blue.png',
   icon_shield_buff:'assets/sprites/icon_shield_buff.png',
@@ -4645,9 +4649,194 @@ function render(dt){
 }
 
 /* ---------------------------------------------------------------------
-   10. Aggiornamento del mondo (movimento, IA, rete) — tempo reale
+   9B. Modalità PRIMA PERSONA (raycasting stile Doom) — attivabile con V
    --------------------------------------------------------------------- */
-const keys = { up:false, down:false, left:false, right:false, attack:false, interact:false };
+const FP_PLANE = 0.72;              // ampiezza del piano di proiezione -> FOV orizzontale
+const FP_MOUSE_SENS = 0.0024;       // sensibilità rotazione orizzontale
+const FP_MOUSE_PITCH = 0.0016;      // sensibilità oscillazione verticale
+const FP_TEX = 64;
+const FP_WEAP_KEY = { guerriero:'fp_spada', ladro:'fp_pugnale', mago:'fp_bastone', ranger:'fp_arco' };
+let fpMode = false;
+let fpAngle = 0, fpPitch = 0;
+let fpTurnL = false, fpTurnR = false;
+let fpMouseLock = false;
+let fpLookBob = 0;
+let fpBuf = null, fpCtx = null, fpW = 0, fpH = 0;
+let fpImgData = null, fpPx = null;   // ImageData + vista Uint32
+let fpZ = null;                       // z-buffer per colonna (distanza muro)
+let fpWallPx = null, fpFloorPx = null; // texture pack (Uint32, rgab pack)
+const FP_BANK = {};                  // sprite bank: key -> {px, w, h}
+const FP_WP_CROP = {};               // bbox del contenuto delle armi
+
+function fpTilePx(cv){
+  if (!cv) return null;
+  const c = document.createElement('canvas'); c.width = c.height = FP_TEX;
+  const cx = c.getContext('2d'); cx.drawImage(cv, 0, 0);
+  return new Uint32Array(cx.getImageData(0, 0, FP_TEX, FP_TEX).data.buffer);
+}
+function fpBankImg(key){
+  const es = ENTITY_SPRITES[key];
+  let img = null, sX = 0, sY = 0, sW = 0, sH = 0;
+  if (es && SPRITE_SHEET_INFO[es.sheet] && SPRITES[es.sheet] && SPRITES[es.sheet].complete && SPRITES[es.sheet].naturalWidth){
+    img = SPRITES[es.sheet]; sW = img.naturalWidth/SPRITE_SHEET_INFO[es.sheet]; sH = img.naturalHeight; sX = es.cell*sW;
+  } else {
+    img = SPRITES[key];
+  }
+  if (!img || !img.complete || !img.naturalWidth) return null;
+  const w = Math.ceil(sW||img.naturalWidth), h = Math.ceil(sH||img.naturalHeight);
+  const cv = document.createElement('canvas'); cv.width=w; cv.height=h;
+  const cx = cv.getContext('2d', {willReadFrequency:true});
+  cx.drawImage(img, sX, sY, sW||img.naturalWidth, sH||img.naturalHeight, 0, 0, w, h);
+  try { return { px:new Uint32Array(cx.getImageData(0,0,w,h).data.buffer), w, h }; } catch(e){ return null; }
+}
+function fpSprite(key){
+  if (PROJECTILES.FP_BANK[key] != null) return FP_BANK[key];
+  const r = fpBankImg(key); FP_BANK[key] = r; return r;
+}
+function fpResizeBuffers(){
+  fpW = Math.max(160, Math.round(cssW/3));
+  fpH = Math.max(110, Math.round(cssH/3));
+  fpBuf = document.createElement('canvas'); fpBuf.width = fpW; fpBuf.height = fpH;
+  fpCtx = fpBuf.getContext('2d', {willReadFrequency:true});
+  fpImgData = fpCtx.createImageData(fpW, fpH);
+  fpPx = new Uint32Array(fpImgData.data.buffer);
+  fpZ = new Float32Array(fpW);
+}
+function toggleFP(){
+  fpMode = !fpMode;
+  if (fpMode){
+    if (me && me.facing) fpAngle = Math.atan2(me.facing.y, me.facing.x);
+    fpPitch = 0; fpLookBob = 0;
+    fpResizeBuffers();
+    fpWallPx = fpTilePx(SPRITE_TILES['wall_stone']) || fpTilePx(SPRITE_TILES['wall_brick']);
+    fpFloorPx = fpTilePx(SPRITE_TILES['floor_stone']) || fpTilePx(SPRITE_TILES['floor_dirt']);
+    showToast('Prima-persona: guarda col mouse, V per tornare alla vista classica');
+    try { canvas.requestPointerLock(); } catch(e){}
+  } else {
+    try { if (document.pointerLockElement) document.exitPointerLock(); } catch(e){}
+    showToast('Vista dall\'alto');
+  }
+}
+document.addEventListener('pointerlockchange', ()=>{
+  fpMouseLock = document.pointerLockElement === canvas;
+  if (fpMode && !fpMouseLock) showToast('Clicca sul gioco per usare il mouse');
+});
+document.addEventListener('mousemove', (e)=>{
+  if (!fpMode || !fpMouseLock) return;
+  fpAngle += e.movementX * F_MOUSE_SENS;
+  fpAngle %= (Math.PI*2);
+  fpPitch = clamp(fpPitch - e.movementY * F_MOUSE_PITCH, -0.6, 0.6);
+});
+/* centro dello schermo (mira) in coordinate monde per l'attacco: il bianco colpo va
+   dove guarda la telecamera, cioè lungo me.facing già sincronizzato */
+function fpSyncFacing(){
+  if (fpMode) me.facing = {x:Math.cos(fpAngle), y:Math.sin(fpAngle)};
+}
+/* proiezione FP: ritorna {x,y,dist,on} coords CSS oppure null */
+let fpProjOut = {x :0, y:0, d:0, vis:false};
+function fpProject(wx, wy, unitH){
+  const rx = wx-me.x, ry = wy-me.y;
+  const ca = Math.cos(fpAngle), sa = Math.sin(fpAngle);
+  const px = -sa*FP_PLANE, py = ca*FP_PLANE;
+  const invDet = 1/(px*ca - ca0*0); // placeholder sostituito sotto
+  ...
+}
+
+function renderFirstPerson(dt){
+  if (!world.layout) return;
+  if (!fpBuf || fpBuf.width!==fpW || fpBuf.height!==fpH) fpResizeBuffers();
+  const layout = world.layout;
+  const W = fpW, H = fpH;
+  const dirX = Math.cos(fpAngle), dirY = Math.sin(fpAngle);
+  const planeX = -dirY*FP_PLANE, planeY = dirX*FP_PLANE;
+  const horizonY = clamp(H/2 + fpPitch*H, 4, H-4);   // linea dell'orizzonte
+  const stepFactor = 1;
+  const flick = 0.92 + 0.08*Math.sin(torchClock*3.1) + 0.04*Math.sin(torchClock*7.7);
+  const depthDark = clamp(((world.depth||1)-1)*0.02, 0, 0.35);
+
+  /* soffitto: gradiente scuro (pietra scavata) */
+  let ro = 30, fc = 26, rb = 22;
+  for (let y=0; y<horizonY; y++){
+    const k = y/H;
+    const br = (0.62 + 0.38*k) * (1 - depthDark);
+    const row0 = (y*W)|0;
+    const r = (ro*br)|0, g = (fc*br)|0, b = (rb*br)|0;
+    const cc = (0xFF000000) | (b<<16) | (g<<8) | r;
+    for (let x=0; x<W; x++) fpPx[row0+x] = cc;
+  }
+
+  /* muri + pavimento con raycasting DDA */
+  const torches = layout.torches;
+  for (let x=0; x<W; x++){
+    const cameraX = 2*x/W - 1;
+    const rdx = dirX + planeX*cameraX;
+    const rdy = dirY + planeY*cameraX;
+    let mapX = Math.floor(me.x), mapY = Math.floor(me.y);
+    const deltaX = Math.abs(1/(rdx||1e-9)), deltaY = Math.abs(1/(rdy||1e-9));
+    let stepX, stepY, sideDistX, sideDistY;
+    if (rdx < 0){ stepX=-1; sideDistX=(me.x-mapX)*deltaX; } else { stepX=1; sideDistX=(mapX+1-me.x)*deltaX; }
+    if (rdy < 0){ stepY=-1; sideDistY=(me.y-mapY)*deltaY; } else { stepY=1; sideDistY=(mapY+1-me.y)*deltaY; }
+    let side = 0, hit = false;
+    for (let i=0;i<64;i++){
+      if (sideDistX<sideDistY){ sideDistX+=deltaX; mapX+=stepX; side=0; }
+      else { sideDistY+=deltaY; mapY+=stepY; side=1; }
+      if (mapX<0||mapY<0||mapX>=layout.w||mapY>=layout.h) break;
+      if (layout.grid[mapY][mapX]===T_WALL){ hit=true; break; }
+    }
+    const perp = side===0 ? (sideDistX-deltaX) : (sideDistY-deltaY);
+    if (!hit || perp <= 0.001){ fpZ[x]=1e6; continue; }
+    fpZ[x] = perp;
+    const rayLen = perp*Math.sqrt(1+cameraX*cameraX);
+    const lineH = H/perp;
+    const drawStart = Math.max(0, Math.round(horizonY - lineH/2));
+    const drawEnd   = Math.min(H-1, Math.round(horizonY + lineH/2));
+    let wallX = side===0 ? me.y+rdy*perp : me.x+rdx*perp;
+    wallX -= Math.floor(wallX);
+    let texX = Math.floor(wallX*FP_TEX);
+    if ((side===0 && rdx>0) || (side===1 && rdy<0)) texX = FP_TEX-1-texX;
+    texX = texX<0?0:(texX>FP_TEX-1?FP_TEX-1:texX);
+    // luce per colonna: distanza + fiamma torcia del giocatore (vista) + torce
+    let shade = clamp(2.1/(1+rayLen*rayLen*0.24), 0, 1.18)*flick*(1-depthDark);
+    // darkness per la map visibility
+    const cellKey = mapX+','+mapY;
+    if (!me.isSpectator && !world.visibleSet.has(cellKey)) shade = 0;
+    // torce nelle stanze: contributo di luce
+    const hx = me.x+rdx*rayLen, hy = me.y+rdy*rayLen;
+    for (const tc of torches){
+      const dx=tc.x+0.5-hx, dy=tc.y+0.5-hy;
+      const d2=dx*dx+dy*dy;
+      if (d2 < 49){ const l = Math.max(0, 1-Math.sqrt(d2)/7); shade += l*0.5; }
+    }
+    if (shade > 1.18) shade = 1.18;
+    const wallBase = fpWallPx;
+    if (!wallBase){ // caddura: colore pieno
+      const rr = Math.min(255,(86*shade)), gg=Math.min(255,(68*shade)), bb=Math.min(255,(48*shade));
+      const cc = 0xFF000000|(bb<<16)|(gg<<8)|rr;
+      for (let y=drawStart;y<=drawEnd;y++) fpPx[y*W+x]=cc;
+    } else {
+      const src = wallBase.px;
+      const lineStep = FP_TEX/(lineH||1);
+      let texPos = (drawStart - (horizonY - lineH/2)) * lineStep;
+      for (let y=drawStart;y<=drawEnd;y++){
+        const ti = ((texPos|0) % FP_TEX + FP_TEX) % FP_TEX;
+        texPos += lineStep;
+        const i = (ti*FP_TEX + texX);
+        const c = src[i];
+        const r = (c&255)*shade, g = ((c>>>8)&255)*shade, b = ((c>>>16)&255)*shade;
+        fpPx[y*W+x] = 0xFF000000 | (Math.min(255,b|0)<<16) | (Math.min(255,g|0)<<8) | Math.min(255,r|0);
+      }
+    }
+    // PASTICCIO floor (below horizon): floor casting
+    if (horizonY < H-1 && fpFloorPx){
+      const fsrc = fpFloorPx.px;
+      for (let y=Math.max(drawEnd+1, 1); y<H; y++){
+        const rowDist = (0.5*H)/(y - horizonY);
+        if (rowDist > 14) { for (let fy = y; fy<H; fy++){ const rr = (y*W)|0; for (let x2= x2=0; x2<W; x2++) fpPx[rr+x2]=0xFF000000; } break; }
+        const fx0 = me.x + rowDist*(rdx*2/W*W) ...
+      }
+    }
+  }
+}
 let lastMoveDir = {x:0,y:1};
 
 function updateLocalPlayer(dt){
