@@ -1,16 +1,27 @@
 # ABISSO — Enhanced Version
 
-> ## ⚠️ Progetto temporaneamente in pausa
+> ## 🎮 Gioco disponibile
 >
-> Il progetto è **temporaneamente in pausa** e **al momento non è giocabile**.
+> Il gioco è disponibile e giocabile qui:
 >
-> Il repository è attualmente in fase di **trasferimento/migrazione** per risolvere alcuni problemi tecnici. Per questo motivo il codice e il gioco non sono temporaneamente disponibili.
+> **https://sanciopanza88.github.io/Abisso-2.0/**
 >
-> Il progetto tornerà online non appena il trasferimento sarà completato. Grazie per la pazienza!
+> 💻 **Codice sorgente:**
+> https://github.com/SancioPanza88/Abisso-2.0
 
 ---
 
 Roguelike multiplayer in tempo reale, senza server, in un unico file.
 
-- 🎬 Video originale: https://www.youtube.com/watch?v=Pxu4IHBrLTU
-- 🎮 Gioco originale: https://www.youdev.it/games/abisso.html
+* 🎬 Video originale: https://www.youtube.com/watch?v=Pxu4IHBrLTU
+* 🎮 Gioco originale: https://www.youdev.it/games/abisso.html
+* 🎮 Gioca alla versione Enhanced: https://sanciopanza88.github.io/Abisso-2.0/
+* 💻 Codice sorgente: https://github.com/SancioPanza88/Abisso-2.0
+
+## Come si gioca
+
+1. Apri il gioco dal link qui sopra.
+2. Scegli il tuo eroe.
+3. Inserisci il nome e il codice della stanza.
+4. Entra nell'Abisso e gioca.
+5. Per il multiplayer, condividi il codice della stanza con gli altri giocatori.
